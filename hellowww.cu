@@ -21,7 +21,23 @@ using namespace std;
 //#define DEFAULT_NBINS 30 
 
 #define CONV_FACTOR 57.2957795 // 180/pi
+__device__ double atomicAdd(double* address, double val)
+{
+    unsigned long long int* address_as_ull =
+                              (unsigned long long int*)address;
+    unsigned long long int old = *address_as_ull, assumed;
 
+    do {
+        assumed = old;
+        old = atomicCAS(address_as_ull, assumed,
+                        __double_as_longlong(val +
+                               __longlong_as_double(assumed)));
+
+    // Note: uses integer comparison to avoid hang in case of NaN (since NaN != NaN)
+    } while (assumed != old);
+
+    return __longlong_as_double(old);
+}
 
 int doCalcRaDec(FILE *infile0, FILE *infile1, FILE *outfile, bool silent_on_GPU_testing, float scale_factor, int nbins, float hist_lower_range, float hist_upper_range, float hist_bin_width, int log_binning_flag, bool two_different_files, float conv_factor_angle);
 
