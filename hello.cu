@@ -2,7 +2,30 @@
 #include <math.h>  
 const int N = 16; 
 const int blocksize = 16; 
- 
+
+ void read_the_files()
+{
+	FILE *real_g; FILE *synthetic_g;
+	int galaxies_r, galaxies_s; 
+	float *a0, *a1, *b0, *b1;
+	real_g = fopen("data_100k_arcmin.txt","r");
+    synthetic_g = fopen("flat_100k_arcmin.txt","r");	
+	 fscanf(real_g, "%d", &galaxies_r);
+	 fscanf(synthetic_g,  "%d", &galaxies_s);
+	
+	
+	a0= (float*) malloc(galaxies_r* sizeof(float));
+	b0= (float*) malloc(galaxies_r* sizeof(float)); 
+	a1= (float*) malloc(galaxies_s* sizeof(float)); 
+	b1= (float*) malloc(galaxies_s* sizeof(float)); 
+	for(int i=0; i<galaxies_r; i++)
+    {
+       
+        fscanf(real_g, "%f %f", &a0[i], &b0[i]);
+       fscanf(synthetic_g, "%f %f", &a1[i], &b1[i]);
+    }		    
+for(int i=0; i<galaxies_r; i++) printf("%f", a0[i]); 
+}
 //__global__ 
 /*void hello(char *a, char *b) 
 {
@@ -45,26 +68,4 @@ int main()
 	return EXIT_SUCCESS;
 }
 
-void read_the_files()
-{
-	FILE *real_g; FILE *synthetic_g;
-	int galaxies_r, galaxies_s; 
-	float *a0, *a1, *b0, *b1;
-	real_g = fopen("data_100k_arcmin.txt","r");
-    synthetic_g = fopen("flat_100k_arcmin.txt","r");	
-	 fscanf(real_g, "%d", &galaxies_r);
-	 fscanf(synthetic_g,  "%d", &galaxies_s);
-	
-	
-	a0= (float*) malloc(galaxies_r* sizeof(float));
-	b0= (float*) malloc(galaxies_r* sizeof(float)); 
-	a1= (float*) malloc(galaxies_s* sizeof(float)); 
-	b1= (float*) malloc(galaxies_s* sizeof(float)); 
-	for(int i=0; i<galaxies_r; i++)
-    {
-       
-        fscanf(real_g, "%f %f", &a0[i], &b0[i]);
-       fscanf(synthetic_g, "%f %f", &a1[i], &b1[i]);
-    }		    
-for(int i=0; i<galaxies_r; i++) printf("%f", a0[i]); 
-}
+
