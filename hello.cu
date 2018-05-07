@@ -16,8 +16,8 @@ int main()
  
 	char *ad;
 	int *bd;
-	const int csize = N*sizeof(char);
-	const int isize = N*sizeof(char);
+	const char csize = N*sizeof(char);
+	const char isize = N*sizeof(char);
  
 	printf("%s", a);
  
