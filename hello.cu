@@ -3,7 +3,7 @@
 const int N = 16; 
 const int blocksize = 16; 
  
-__global__ 
+//__global__ 
 /*void hello(char *a, char *b) 
 {
 	a[threadIdx.x] += b[threadIdx.x];
@@ -16,7 +16,7 @@ int main()
 	float a2=4644.35; 
 	float b2=3749.52;
 	
-	float theta1= arccos(sin(b1)*sin(b2) + cos(b1)*cos(b2) *cos(alpha1-a2));
+	float theta1= acos(sin(b1)*sin(b2) + cos(b1)*cos(b2) *cos(alpha1-a2));
 	printf("%f\n", theta1);
  
 	/*char *ad;
