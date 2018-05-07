@@ -47,7 +47,7 @@ int main()
 
 void read_the_files()
 {
-	FILE *real_g, FILE *synthetic_g;
+	FILE *real_g; FILE *synthetic_g;
 	int galaxies_r, galaxies_s; 
 	float *a0, *a1, *b0, *b1;
 	real_g = fopen("data_100k_arcmin.txt","r");
