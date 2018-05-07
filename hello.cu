@@ -52,7 +52,7 @@ void read_the_files(FILE *real_g, FILE *synthetic_g)
 	real_g = fopen("data_100k_arcmin.txt","r");
     synthetic_g = fopen("flat_100k_arcmin.txt","r");	
 	 fscanf(real_g, "%d", &galaxies_r);
-	 fsancf(synthetic_g,  "%d", &galaxies_s);
+	 fscanf(synthetic_g,  "%d", &galaxies_s);
 	
 	
 	a0= (float*) malloc(galaxies_r* sizeof(float));
