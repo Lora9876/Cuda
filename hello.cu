@@ -1,20 +1,25 @@
 #include <stdio.h>
- 
+#include <math.h>  
 const int N = 16; 
 const int blocksize = 16; 
  
 __global__ 
-void hello(char *a, char *b) 
+/*void hello(char *a, char *b) 
 {
 	a[threadIdx.x] += b[threadIdx.x];
 }
- 
+ */
 int main()
 {
-	char a[N] = "Hello \0\0\0\0\0\0";
-	int b[N] = {15, 10, 6, 0, -11, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	float alpha1= 4646.98;
+	float b1= 3749.51;
+	float a2=4644.35; 
+	float b2=3749.52;
+	
+	float theta1= arccos(sin(b1)*sin(b2) + cos(b1)*cos(b2) *cos(alpha1-a2));
+	printf("%f\n", theta1);
  
-	char *ad;
+	/*char *ad;
 	int *bd;
 	const char csize = N*sizeof(char);
 	const char isize = N*sizeof(char);
@@ -33,6 +38,6 @@ int main()
 	cudaFree( ad );
 	cudaFree( bd );
 	
-	printf("%s\n", a);
+	printf("%s\n", a);*/
 	return EXIT_SUCCESS;
 }
