@@ -4,7 +4,7 @@ const int N = 16;
 const int blocksize = 16; 
  
 __global__ 
-void hello(char *a, int *b) 
+void hello(char *a, char *b) 
 {
 	a[threadIdx.x] += b[threadIdx.x];
 }
@@ -17,7 +17,7 @@ int main()
 	char *ad;
 	int *bd;
 	const int csize = N*sizeof(char);
-	const int isize = N*sizeof(int);
+	const int isize = N*sizeof(char);
  
 	printf("%s", a);
  
