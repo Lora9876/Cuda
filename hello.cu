@@ -53,12 +53,12 @@ void read_the_files(FILE *real_g, FILE *synthetic_g)
     synthetic_g = fopen("flat_100k_arcmin.txt","r");	
 	 fscanf(real_g, "%d", &galaxies_r);
 	 fsancf(synthetic_g,  "%d", &galaxies_s);
-	int size_of_galaxy_array0 = NUM_GALAXIES0 * sizeof(float);
 	
-	a0= (float*) malloc(galaxies_r* sizeof(float);
-	b0= (float*) malloc(galaxies_r* sizeof(float); 
-	a1= (float*) malloc(galaxies_s* sizeof(float); 
-	b1= (float*) malloc(galaxies_s* sizeof(float); 
+	
+	a0= (float*) malloc(galaxies_r* sizeof(float));
+	b0= (float*) malloc(galaxies_r* sizeof(float)); 
+	a1= (float*) malloc(galaxies_s* sizeof(float)); 
+	b1= (float*) malloc(galaxies_s* sizeof(float)); 
 	for(int i=0; i<galaxies_r; i++)
     {
        
