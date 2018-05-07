@@ -17,7 +17,10 @@ int main()
 	float b2=3749.52;
 	
 	float theta1= acos(sin(b1)*sin(b2) + cos(b1)*cos(b2) *cos(alpha1-a2));
+	atomicAdd(b1,7);
+	printf("%f\n", b1);
 	printf("%f\n", theta1);
+	
  
 	/*char *ad;
 	int *bd;
