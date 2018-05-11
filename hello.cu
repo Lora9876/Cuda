@@ -86,7 +86,7 @@ const int thread= 256;
 
     int hist_array_size = thread * sizeof(unsigned long);
     hist_array =  (unsigned long*)malloc(hist_array_size);
-    printf("Size of histogram array: %d bytes\n",hist_array_size);
+  
     memset(hist_array,0,hist_array_size); 
 	 
  //prepration for the kernel
