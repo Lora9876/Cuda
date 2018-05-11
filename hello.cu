@@ -2,14 +2,16 @@
 #include <math.h>  
 const int N = 16; 
 const int blocksize = 16; 
-
+const int  SUBMATRIX_SIZE=16384 ;
+const int thread= 256; 
  void read_the_files()
 {
+	//reading files 1 and 2 
 	FILE *real_g; FILE *synthetic_g;
 	int galaxies_r, galaxies_s; 
 	float *a0, *a1, *b0, *b1;
 	real_g = fopen("data_100k_arcmin.txt","r");
-    synthetic_g = fopen("flat_100k_arcmin.txt","r");	
+    	synthetic_g = fopen("flat_100k_arcmin.txt","r");	
 	 fscanf(real_g, "%d", &galaxies_r);
 	 fscanf(synthetic_g,  "%d", &galaxies_s);
 	
@@ -24,7 +26,70 @@ const int blocksize = 16;
         fscanf(real_g, "%f %f", &a0[i], &b0[i]);
        fscanf(synthetic_g, "%f %f", &a1[i], &b1[i]);
     }		    
-for(int i=0; i<galaxies_r; i++) printf("%f", a0[i]); 
+//for(int i=0; i<galaxies_r; i++) printf("%f", a0[i]); 
+	 
+    dim3 grid, block;
+    
+    grid.x = 8192/thread; 
+    block.x = SUBMATRIX_SIZE/grid.x; 
+	 
+    cudaMalloc((void **) &aa0, galaxies_r* sizeof(float));
+    cudaMalloc((void **) &bb0, galaxies_r* sizeof(float));
+
+    cudaMalloc((void **) &aa1, galaxies_s* sizeof(float));
+    cudaMalloc((void **) &bb1, galaxies_s* sizeof(float) );
+
+    // dovoljno memorije?
+    
+
+    // Initialize array to all 0's
+    cudaMemset(aa0,0,galaxies_r* sizeof(float));
+    cudaMemset(bb0,0,galaxies_r* sizeof(float));
+    cudaMemset(aa1,0,galaxies_s* sizeof(float));
+    cudaMemset(bb1,0,galaxies_s* sizeof(float));
+
+    cudaMemcpy(aa0, a0, galaxies_r* sizeof(float), cudaMemcpyHostToDevice );
+    cudaMemcpy(bb0, b0,galaxies_r* sizeof(float), cudaMemcpyHostToDevice );
+    cudaMemcpy(aa1, a1, galaxies_s* sizeof(float), cudaMemcpyHostToDevice );
+    cudaMemcpy(bb1, b1,galaxies_s* sizeof(float), cudaMemcpyHostToDevice );
+
+    int x, y;
+
+    int num_x = galaxies_r/ SUBMATRIX_SIZE;
+    int num_y = galaxies_s / SUBMATRIX_SIZE;
+    
+    // Take care of edges of matrix.
+    if (galaxies_r%SUBMATRIX_SIZE != 0)
+    {
+        num_submatrices_x ++;
+    }
+    if (galaxies_s%SUBMATRIX_SIZE != 0)
+    {
+        num_submatrices_y ++;
+    }
+
+	 //preparing the histogram array 
+	 int *hist, *dev_h;
+
+    int size_h = SUBMATRIX_SIZE * thread;
+    int size_h_bytes = size_h*sizeof(int);
+
+    hist = (int*)malloc(size_h_bytes);
+    memset(hist, 0, size_h_bytes);
+
+   
+    cudaMalloc((void **) &dev_h, (size_h_bytes));
+    cudaMemset(dev_h, 0, size_h_bytes);
+
+    unsigned long  *hist_array;
+
+    int hist_array_size = threads * sizeof(unsigned long);
+    hist_array =  (unsigned long*)malloc(hist_array_size);
+    printf("Size of histogram array: %d bytes\n",hist_array_size);
+    memset(hist_array,0,hist_array_size); 
+	 
+ //prepration for the kernel
+	 
 }
 //__global__ 
 /*void hello(char *a, char *b) 
