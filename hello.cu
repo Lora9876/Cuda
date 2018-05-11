@@ -32,6 +32,7 @@ const int thread= 256;
     
     grid.x = 8192/thread; 
     block.x = SUBMATRIX_SIZE/grid.x; 
+	 float *aa1, *bb1, *aa0, *bb0; 
 	 
     cudaMalloc((void **) &aa0, galaxies_r* sizeof(float));
     cudaMalloc((void **) &bb0, galaxies_r* sizeof(float));
@@ -61,11 +62,11 @@ const int thread= 256;
     // Take care of edges of matrix.
     if (galaxies_r%SUBMATRIX_SIZE != 0)
     {
-        num_submatrices_x ++;
+        num_x ++;
     }
     if (galaxies_s%SUBMATRIX_SIZE != 0)
     {
-        num_submatrices_y ++;
+        num_y ++;
     }
 
 	 //preparing the histogram array 
@@ -83,7 +84,7 @@ const int thread= 256;
 
     unsigned long  *hist_array;
 
-    int hist_array_size = threads * sizeof(unsigned long);
+    int hist_array_size = thread * sizeof(unsigned long);
     hist_array =  (unsigned long*)malloc(hist_array_size);
     printf("Size of histogram array: %d bytes\n",hist_array_size);
     memset(hist_array,0,hist_array_size); 
