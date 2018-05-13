@@ -106,7 +106,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
     int x, y;
 
-	 {  int num_x = galaxies_r/ SUBMATRIX_SIZE;
+	 /*  int num_x = galaxies_r/ SUBMATRIX_SIZE;
     int num_y = galaxies_s / SUBMATRIX_SIZE;
     
     // Take care of edges of matrix.
@@ -117,7 +117,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     if (galaxies_s%SUBMATRIX_SIZE != 0)
     {
         num_y ++;
-    }
+     */
 	 }
 	 //preparing the histogram array 
 	 int *hist, *histi , *tmp;
@@ -147,7 +147,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
  }
  //prepration for the kernel
 	 
-}
+
 //__global__ 
 /*void hello(char *a, char *b) 
 {
