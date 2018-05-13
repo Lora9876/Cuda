@@ -38,8 +38,8 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		
                 angle = sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[0]);
 		//how to put angle
-               
-		atomicInc(&shared[angle],0); 
+               int *p= &shared[angle];
+		atomicInc(p,0); 
 	
 	}
 	
