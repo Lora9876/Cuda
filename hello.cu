@@ -106,7 +106,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
     int x, y;
 
-    int num_x = galaxies_r/ SUBMATRIX_SIZE;
+	 {  int num_x = galaxies_r/ SUBMATRIX_SIZE;
     int num_y = galaxies_s / SUBMATRIX_SIZE;
     
     // Take care of edges of matrix.
@@ -118,9 +118,9 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     {
         num_y ++;
     }
-
+	 }
 	 //preparing the histogram array 
-	 int *hist, *dev_h;
+	 int *hist, *histi , *tmp;
 
    
     int size_h_bytes = 720*sizeof(int);
@@ -138,8 +138,8 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     hist_array =  (unsigned long*)malloc(hist_array_size);
   
     memset(hist_array,0,hist_array_size); 
-	 cudaMemset(tmp,0,size_hist_bytes);
-	   angles<<<grid,block>>>(aa0, bb00,aa1, bb1, 0, 0, 512, 512, tmp);
+	 cudaMemset(tmp,0,size_h_bytes);
+	   angles<<<grid,block>>>(aa0, bb0,aa1, bb1, 0, 0, 512, 512, tmp);
             cudaMemcpy(hist, tmp, size_h_bytes, cudaMemcpyDeviceToHost);
 	 
 	 for(int i=0; i<720; i++)
