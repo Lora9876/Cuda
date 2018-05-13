@@ -1,9 +1,59 @@
 #include <stdio.h>
 #include <math.h>  
-const int N = 16; 
-const int blocksize = 16; 
-const int  SUBMATRIX_SIZE=16384 ;
+//const int N = 16; 
+//const int blocksize = 16; 
+//const int  SUBMATRIX_SIZE=16384 ;
 const int thread= 256; 
+const int bins=720; 
+__global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float *b1, int xind, int yind, int max_x, int max_y, volatile int *histi)
+{
+	int idx = blockIdx.x * blockDim.x + threadIdx.x; // ovo proveri
+	float angle; 
+    idx += xind;
+ __shared__ int shared[bins];
+    // za prvu petlju ocistis uvek
+    if(threadIdx.x==0)
+    {
+        for (int i=0;i<bins;i++)
+            shared_hist[i] = 0;
+    }
+    __syncthreads();
+
+	 if (idx<max_x)
+    {
+       
+      //provera
+
+        for(i=yind; i<ymax; i++)
+        {
+           
+                
+		
+                angle = sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[0]);
+		//how to put angle
+               
+		atomicAdd(&shared[angle],1); 
+                
+	}
+	
+	
+	
+
+          
+
+    __syncthreads();
+
+    if(threadIdx.x==0)
+    {
+        for(int i=0;i<bins;i++)
+            histi[i+(blockIdx.x*(nbins+2))]=shared[i];
+    }
+
+
+
+}
+
+
  void read_the_files()
 {
 	//reading files 1 and 2 
@@ -26,12 +76,12 @@ const int thread= 256;
         fscanf(real_g, "%f %f", &a0[i], &b0[i]);
        fscanf(synthetic_g, "%f %f", &a1[i], &b1[i]);
     }		    
-//for(int i=0; i<galaxies_r; i++) printf("%f", a0[i]); 
+//for(int i=0; i<galaxies_r; i++) printf("%f", a0[i]);
 	 
     dim3 grid, block;
     
-    grid.x = 8192/thread; 
-    block.x = SUBMATRIX_SIZE/grid.x; 
+    grid.x = thread; 
+    block.x = 1024; 
 	 float *aa1, *bb1, *aa0, *bb0; 
 	 
     cudaMalloc((void **) &aa0, galaxies_r* sizeof(float));
@@ -72,23 +122,29 @@ const int thread= 256;
 	 //preparing the histogram array 
 	 int *hist, *dev_h;
 
-    int size_h = SUBMATRIX_SIZE * thread;
-    int size_h_bytes = size_h*sizeof(int);
+   
+    int size_h_bytes = 720*sizeof(int);
 
     hist = (int*)malloc(size_h_bytes);
     memset(hist, 0, size_h_bytes);
 
    
-    cudaMalloc((void **) &dev_h, (size_h_bytes));
-    cudaMemset(dev_h, 0, size_h_bytes);
+    cudaMalloc((void **) &histi, (size_h_bytes));
+    cudaMemset(histi, 0, size_h_bytes);
 
     unsigned long  *hist_array;
 
-    int hist_array_size = thread * sizeof(unsigned long);
+    int hist_array_size = 720 * sizeof(unsigned long);
     hist_array =  (unsigned long*)malloc(hist_array_size);
   
     memset(hist_array,0,hist_array_size); 
+	 cudaMemset(tmp,0,size_hist_bytes);
+	   angles<<<grid,block>>>(aa0, bb00,aa1, bb1, 0, 0, 512, 512, tmp);
+            cudaMemcpy(hist, tmp, size_h_bytes, cudaMemcpyDeviceToHost);
 	 
+	 for(int i=0; i<720; i++)
+		printf("%d", hist[i]);
+ }
  //prepration for the kernel
 	 
 }
