@@ -37,10 +37,10 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
                 
 		
                 angle = sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[0]);
-		//shared[angle]++ ;
+		shared[int(angle)]++ ;
 		//how to put angle
              //  int *p= &shared[angle];
-		atomicAdd(&shared[int(angle)],1); 
+		//atomicAdd(&shared[int(angle)],1); 
 	
 	}
 	
@@ -254,7 +254,7 @@ int main()
 	
 	printf("%f\n", b1);
 	printf("%f\n", theta1);
-	getDeviceDiagnostics(20000, 2);
+	//getDeviceDiagnostics(20000, 2);
  	read_the_files(); 
 	/*char *ad;
 	int *bd;
