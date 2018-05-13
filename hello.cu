@@ -161,7 +161,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	a[threadIdx.x] += b[threadIdx.x];
 }
  */
-void getDeviceDiagnostics(int tot_gals, int n_coords){
+/*void getDeviceDiagnostics(int tot_gals, int n_coords){
 
  ////////////////////////////////////////////////////////////////////////////
     // Now get the info from the device.
@@ -241,7 +241,7 @@ void getDeviceDiagnostics(int tot_gals, int n_coords){
         }
 
         printf("\n------ End CUDA device diagnostics ------\n\n");
-    }
+    }*/
 int main()
 {
 	float alpha1= 4646.98;
