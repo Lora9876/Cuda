@@ -15,7 +15,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     if(threadIdx.x==0)
     {
         for (int i=0;i<bins;i++)
-            shared_hist[i] = 0;
+            shared[i] = 0;
     }
     __syncthreads();
 
@@ -24,7 +24,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
        
       //provera
 
-        for(i=yind; i<ymax; i++)
+        for(int i=yind; i<max_y; i++)
         {
            
                 
@@ -46,7 +46,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     if(threadIdx.x==0)
     {
         for(int i=0;i<bins;i++)
-            histi[i+(blockIdx.x*(nbins+2))]=shared[i];
+            histi[i]=shared[i];
     }
 
 
