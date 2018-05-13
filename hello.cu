@@ -37,6 +37,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
                 
 		
                 angle = sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[0]);
+		printf("%d %d %d %d %d ", sin(b0[idx]),sin(b1[i]),cos(b0[idx]),cos(b1[i]), angle); 
 		shared[int(angle)]++ ;
 		//how to put angle
              //  int *p= &shared[angle];
