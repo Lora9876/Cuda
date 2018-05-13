@@ -1,5 +1,12 @@
-#include <stdio.h>
-#include <math.h>  
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<math.h>
+#include<unistd.h>
+
+#include<cuda_runtime.h>
+
+using namespace std; 
 //const int N = 16; 
 //const int blocksize = 16; 
 //const int  SUBMATRIX_SIZE=16384 ;
