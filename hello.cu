@@ -17,7 +17,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	int idx = blockIdx.x * blockDim.x + threadIdx.x; // ovo proveri
 	float angle; 
     idx += xind;
- __shared__ int shared[bins];
+ __shared__ unsigned int shared[bins];
     // za prvu petlju ocistis uvek
     if(threadIdx.x==0)
     {
@@ -39,7 +39,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
                 angle = sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[0]);
 		//how to put angle
                
-		atomicAdd(&shared[angle],1); 
+		atomicInc(&shared[angle],0); 
 	
 	}
 	
