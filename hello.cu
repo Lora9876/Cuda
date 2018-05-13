@@ -33,7 +33,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		//how to put angle
                
 		atomicAdd(&shared[angle],1); 
-                
+	
 	}
 	
 	
@@ -52,7 +52,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
 
 }
-
+}
 
  void read_the_files()
 {
