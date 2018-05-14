@@ -38,7 +38,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 			for(int i=yind; i<max_y; i++)
        			
 			{ angle = sin(b0[idx]*fix) *sin(b1[i]*fix) + cos(b0[idx]*fix) * cos(b1[i]*fix) * cos(fix*a0[idx]*-fix*a1[i]);
-				shared[int(arccos[angle])]++; 	
+				shared[int(arccos[int(angle)])]++; 	
 				
 			//nadji nacin da atomic add proradi :D
 			//atomicAdd(&shared[int(angle)],1); 
