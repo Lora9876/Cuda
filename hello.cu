@@ -192,8 +192,11 @@ int main()
      
      start = clock();
     
-    for (int i=-1; i<1; i+=2/180)
-	    printf("%d," , acos(i)*val); 
+   int i=-1;
+	while (i<1)
+	{  printf("%d," , acos(i)*val);
+	 	i=i+1/90; 
+	}
 		
  	//read_the_files(); 
 	// do some calculations
