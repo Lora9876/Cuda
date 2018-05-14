@@ -98,8 +98,9 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	 
     dim3 grid, block;
     
-    grid.x = thread; 
-    block.x = 1024; 
+    grid.x = 1024; 
+	 grid.y=1024; 
+    block.x = 1; 
 	 float *aa1, *bb1, *aa0, *bb0; 
 	 
     cudaMalloc((void **) &aa0, galaxies_r* sizeof(float));
@@ -156,7 +157,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     hist_array =  (unsigned long*)malloc(hist_array_size);
   
     memset(hist_array,0,hist_array_size); 
-	 cudaMemset(tmp,0,size_h_bytes);
+	 cudaMemset(tmp, 0,size_h_bytes);
 	 
 	   angles<<<grid,block>>>(aa0, bb0, aa1, bb1, 0, 0, 512, 512, tmp);
             cudaMemcpy(hist, tmp, size_h_bytes, cudaMemcpyDeviceToHost);
