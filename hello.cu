@@ -157,7 +157,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
             cudaMemcpy(hist, tmp, size_h_bytes, cudaMemcpyDeviceToHost);
 	 
 	 for(int i=0; i<720; i++)
-		printf("%d", hist[i]);
+		printf("%d ", hist[i]);
  }
  //prepration for the kernel
 	 
