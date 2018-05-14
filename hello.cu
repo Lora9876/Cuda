@@ -14,7 +14,7 @@ using namespace std;
 //const int  SUBMATRIX_SIZE=16384 ;
 const int thread= 256; 
 const int bins=720; 
-double arccos(x) {
+double arccos(double x) {
    return (-0.69813170079773212 * x * x - 0.87266462599716477) * x + 1.5707963267948966;
 }
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float *b1, int xind, int yind, int max_x, int max_y, volatile int *histi)
