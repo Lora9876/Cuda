@@ -14,6 +14,9 @@ using namespace std;
 //const int  SUBMATRIX_SIZE=16384 ;
 const int thread= 256; 
 const int bins=720; 
+double arccos(x) {
+   return (-0.69813170079773212 * x * x - 0.87266462599716477) * x + 1.5707963267948966;
+}
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float *b1, int xind, int yind, int max_x, int max_y, volatile int *histi)
 {
 	int idx = blockIdx.x * blockDim.x + threadIdx.x;// ovo proveri
@@ -35,7 +38,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
       //provera
 			for(int i=yind; i<max_y; i++)
        	
-			{ angle = acos(sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[i]));
+			{ angle = arccos(sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[i]));
 		
 				shared[int(angle/0.25)]++ ;
 			//nadji nacin da atomic add proradi :D
