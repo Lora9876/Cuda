@@ -147,13 +147,13 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     hist_array =  (unsigned long*)malloc(hist_array_size);
   
     memset(hist_array,0,hist_array_size); 
-	 cudaMemset(tmp, 0,size_h_bytes);
+	/* cudaMemset(tmp, 0,size_h_bytes);
 	 
 	   angles<<<grid,block>>>(aa0, bb0, aa1, bb1, 0, 0, 512, 512, tmp);
             cudaMemcpy(hist, tmp, size_h_bytes, cudaMemcpyDeviceToHost);
 	 
 	 for(int i=0; i<720; i++)
-		printf("%d ", hist[i]);
+		printf("%d ", hist[i]);*/
 	 
 	 
     free(a1);
