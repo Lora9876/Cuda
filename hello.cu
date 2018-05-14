@@ -38,7 +38,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		
                 angle = acos(sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[0]));
 		
-		shared[int(angle)]++ ;
+		shared[0]++ ;
 		//how to put angle
              //  int *p= &shared[angle];
 		//atomicAdd(&shared[int(angle)],1); 
@@ -99,7 +99,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     dim3 grid, block;
     
     grid.x = 1024; 
-	 grid.y=1024; 
+	// grid.y=1024; 
     block.x = 1; 
 	 float *aa1, *bb1, *aa0, *bb0; 
 	 
@@ -159,7 +159,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     memset(hist_array,0,hist_array_size); 
 	 cudaMemset(tmp, 0,size_h_bytes);
 	 
-	   angles<<<grid,block>>>(aa0, bb0, aa1, bb1, 0, 0, 512, 512, tmp);
+	   angles<<<grid,block>>>(aa0, bb0, aa1, bb1, 0, 0, 1024, 1024, tmp);
             cudaMemcpy(hist, tmp, size_h_bytes, cudaMemcpyDeviceToHost);
 	 
 	 for(int i=0; i<720; i++)
