@@ -148,7 +148,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
   
     memset(hist_array,0,hist_array_size); 
 	 cudaMemset(tmp,0,size_h_bytes);
-	   angles<<<grid,block>>>(a0, b0,a1, b1, 0, 0, 512, 512, tmp);
+	   angles<<<grid,block>>>(aa0, bb0,a1, b1, 0, 0, 512, 512, tmp);
             cudaMemcpy(hist, tmp, size_h_bytes, cudaMemcpyDeviceToHost);
 	 
 	 for(int i=0; i<720; i++)
@@ -157,93 +157,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
  //prepration for the kernel
 	 
 
-//__global__ 
-/*void hello(char *a, char *b) 
-{
-	a[threadIdx.x] += b[threadIdx.x];
-}
- */
-/*void getDeviceDiagnostics(int tot_gals, int n_coords){
 
- ////////////////////////////////////////////////////////////////////////////
-    // Now get the info from the device.
-    ////////////////////////////////////////////////////////////////////////////
-   
-        printf("\n------ CUDA device diagnostics ------\n\n");
-
-        
-        int nx = SUBMATRIX_SIZE;
-        int ncalc = nx * nx;
-        int gpu_mem_needed = int(tot_gals * sizeof(float)) * n_coords; // need to allocate ra, dec.
-        printf("Requirements: %d calculations and %d bytes memory on the GPU \n\n", ncalc, gpu_mem_needed);
-
-        int deviceCount = 0;
-        cudaError_t error_id = cudaGetDeviceCount(&deviceCount);
-        if (error_id != cudaSuccess) {
-            printf( "cudaGetDeviceCount returned %d\n-> %s\n", (int)error_id, cudaGetErrorString(error_id) );
-        }
-        // This function call returns 0 if there are no CUDA capable devices.
-        if (deviceCount == 0)
-            printf("There is no device supporting CUDA\n");
-        else
-            printf("Found %d CUDA Capable device(s)\n", deviceCount);
-
-
-        int dev=0;
-        for (dev = 0; dev < deviceCount; ++dev) {
-            cudaDeviceProp deviceProp;
-            cudaGetDeviceProperties(&deviceProp, dev);
-            printf("\nDevice %d: \"%s\"\n", dev, deviceProp.name);
-
-            printf("  Total amount of global memory:                 %.0f MBytes (%llu bytes)\n",
-                    (float)deviceProp.totalGlobalMem/1048576.0f, (unsigned long long) deviceProp.totalGlobalMem);
-
-
-            printf("  Warp size:                                     %d\n", deviceProp.warpSize);
-            printf("  Maximum number of threads per block:           %d\n", deviceProp.maxThreadsPerBlock);
-            printf("  Maximum sizes of each dimension of a block:    %d x %d x %d\n",
-                    deviceProp.maxThreadsDim[0],
-                    deviceProp.maxThreadsDim[1],
-                    deviceProp.maxThreadsDim[2]);
-            printf("  Maximum sizes of each dimension of a grid:     %d x %d x %d\n",
-                    deviceProp.maxGridSize[0],
-                    deviceProp.maxGridSize[1],
-                    deviceProp.maxGridSize[2]);
-
-            // does this device have enough capcacity for the calculation?
-            printf("\n*************\n");
-
-            // check memory
-            if((unsigned long long) deviceProp.totalGlobalMem < gpu_mem_needed) printf(" FAILURE: Not eneough memeory on device for this calculation! \n");
-            else
-            {
-                printf("Hurrah! This device has enough memory to perform this calculation\n");
-
-                // check # threads
-
-                int threadsPerBlock = deviceProp.maxThreadsPerBlock; // maximal efficiency exists if we use max # threads per block.
-                int blocksPerGrid = int(ceil(ncalc / threadsPerBlock)); // need nx*nx threads total
-                if(deviceProp.maxThreadsDim[0] >blocksPerGrid) printf("FAILURE: Not enough threads on the device to do this calculation!\n");
-                else
-                {
-                    printf("Hurrah! This device supports enough threads to do this calculation\n");
-                    // how many kernels can we run at once on this machine?
-                    int n_mem = floor(deviceProp.totalGlobalMem / float(gpu_mem_needed));
-                    int n_threads = floor(threadsPerBlock * deviceProp.maxThreadsDim[0]*deviceProp.maxThreadsDim[1] / float(ncalc) ); // max # threads possible?
-
-                    printf("%d %d  \n",  n_threads, deviceProp.maxThreadsDim[0]);
-
-                    int max_kernels = 0;
-                    n_mem<n_threads ? max_kernels = n_mem : max_kernels = n_threads;
-
-                    printf(" you can run %d kernels at a time on this device without overloading the resources \n", max_kernels);
-                }
-            }
-
-        }
-
-        printf("\n------ End CUDA device diagnostics ------\n\n");
-    }*/
 int main()
 {
 	float alpha1= 4646.98;
