@@ -23,7 +23,7 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
    	 __syncthreads();
 
   if(idx<20 && idy<20)
-             {int shared[idx]= a0[idx] + b0[idy]+ shared[idx];}
+             {int shared[idx]= a0[idx] + b1[idy]+ shared[idx];}
    
              }
              
