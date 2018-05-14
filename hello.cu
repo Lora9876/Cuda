@@ -175,12 +175,20 @@ int main()
 	
 	printf("%f\n", b1);
 	printf("%f\n", theta1);
-	startStopwatch();
+	
+	
+	 clock_t start, end;
+     double cpu_time_used;
+     
+     start = clock();
+    
+    
 
  	read_the_files(); 
 	// do some calculations
-stopStopwatch();
-printf("%lf", timeMesuredInSeconds);
+ 	end = clock();
+     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+	printf("%f", cpu_time_used); 
 	return EXIT_SUCCESS;
 }
 
