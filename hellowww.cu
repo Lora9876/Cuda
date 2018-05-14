@@ -61,7 +61,8 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
                
                for(int i=0; i<20;i++)
                  printf("%d ", tmp[i]); 
-               
+               free(a0);
+	  free(a); free(b); free(b1); free(tmp); free(tmp1); 
              return EXIT_SUCCESS;
              
     }
