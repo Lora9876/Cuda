@@ -13,7 +13,7 @@ using namespace std;
 //const int blocksize = 16; 
 //const int  SUBMATRIX_SIZE=16384 ;
 const int thread= 256; 
-const float fix =1/60 * PI *180; 
+const float fix =1/60 ; 
 const int bins=720; 
 
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float *b1, int xind, int yind, int max_x, int max_y, volatile int *histi)
