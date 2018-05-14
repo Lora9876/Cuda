@@ -85,13 +85,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
         fscanf(real_g, "%e %e", &a0[i], &b0[i]);
        fscanf(synthetic_g, "%e %e", &a1[i], &b1[i]);
     }	
-	 for(int i=0; i<galaxies_r; i++)
-	 {
-	 	printf("%e", a1[i]); 
-		 printf("%e", b0[i]); 
-		
-	 
-	 }
+	
 	 fclose(real_g);
 	 fclose(synthetic_g);
 //for(int i=0; i<galaxies_r; i++) printf("%f", a0[i]);
@@ -139,8 +133,8 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
      */
 	 
 	 //preparing the histogram array 
-	 int *hist, *histi , *tmp;
-
+	 int *hist, *histi , *tmp; 
+	 
    
     int size_h_bytes = 720*sizeof(int);
 
@@ -148,8 +142,8 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     memset(hist, 0, size_h_bytes);
 
    
-    cudaMalloc((void **) &histi, (size_h_bytes));
-    cudaMemset(histi, 0, size_h_bytes);
+    cudaMalloc((void **) &tmp, (size_h_bytes));
+    cudaMemset(tmp, 0, size_h_bytes);
 
     unsigned long  *hist_array;
 
