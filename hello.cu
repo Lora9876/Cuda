@@ -6,7 +6,7 @@
 #include <time.h>
 
 #include<cuda_runtime.h>
-
+#define PI 3.14159265
 const int val= 180.0 / PI;
 using namespace std; 
 //const int N = 16; 
