@@ -23,7 +23,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	
  __shared__ unsigned int shared[bins];
     // za prvu petlju ocistis uvek
-    if(threadIdx.x==0)
+    if(threadIdx.x==0 & threadIdx.y==0)
     {
         for (int i=0;i<bins;i++)
             shared[i] = 0;
@@ -35,26 +35,16 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
        
       //provera
 
-       
-           
-                
-		
+       	
                 angle = acos(sin(b0[idx]) *sin(b1[idy]) + cos(b0[idy]) * cos(b1[idy]) * cos(a0[idx]-a1[idy]))*val;
 		
 		shared[int(angle/0.25)]++ ;
 		//nadji nacin da atomic add proradi :D
 		//atomicAdd(&shared[int(angle)],1); 
 	
-	
-	
-	
-	
-
-          
-
     __syncthreads();
 
-    if(threadIdx.x==0)
+    if(threadIdx.x==0& threadIdx.y==0)
     {
         for(int i=0;i<bins;i++)
             histi[i]=shared[i];
