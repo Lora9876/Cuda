@@ -36,7 +36,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
            
                 
 		
-                angle = sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[0]);
+                angle = acos(sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[0]));
 		
 		shared[int(angle)]++ ;
 		//how to put angle
@@ -169,28 +169,9 @@ int main()
 	
 	printf("%f\n", b1);
 	printf("%f\n", theta1);
-	//getDeviceDiagnostics(20000, 2);
+	
  	read_the_files(); 
-	/*char *ad;
-	int *bd;
-	const char csize = N*sizeof(char);
-	const char isize = N*sizeof(char);
- 
-	printf("%s", a);
- 
-	cudaMalloc( (void**)&ad, csize ); 
-	cudaMalloc( (void**)&bd, isize ); 
-	cudaMemcpy( ad, a, csize, cudaMemcpyHostToDevice ); 
-	cudaMemcpy( bd, b, isize, cudaMemcpyHostToDevice ); 
 	
-	dim3 dimBlock( blocksize, 1 );
-	dim3 dimGrid( 1, 1 );
-	hello<<<dimGrid, dimBlock>>>(ad, bd);
-	cudaMemcpy( a, ad, csize, cudaMemcpyDeviceToHost ); 
-	cudaFree( ad );
-	cudaFree( bd );
-	
-	printf("%s\n", a);*/
 	return EXIT_SUCCESS;
 }
 
