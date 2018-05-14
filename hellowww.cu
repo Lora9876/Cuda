@@ -10,11 +10,11 @@
 __global__ void angles(volatile float *a0, volatile float *b1, volatile float *histi)
 {
   int idx = blockIdx.x * blockDim.x + threadIdx.x;
-  int idy  = threadIdx.y + blockDim.y * blockIdx.y;
+  //int idy  = threadIdx.y + blockDim.y * blockIdx.y;
   float m;
   __shared__ unsigned int shared[20];
     		// za prvu petlju ocistis uvek
-    			if((threadIdx.x==0) && (threadIdx.y==0))
+    			if((threadIdx.x==0) )
    			 {
        			 for (int i=0;i<20;i++)
          		   shared[i] = 0;
@@ -22,8 +22,9 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
 	
    	 __syncthreads();
 
-  if(idx<20 && idy<20)
-	 m=  a0[idx] + b1[idy];
+  if(idx<20)
+	  for(int i=0; i<20;i++) 
+	 m=  a0[idx] + b1[i];
              
     __syncthreads();
 	if(idx<20)
@@ -53,7 +54,7 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
                 dim3 grid, block;
     
                grid.x = 1024; 
-                	 grid.y=1024;
+                	
 
                           block.x = 1; 
                 angles<<<block, grid>>>(a0, b0, tmp1);
@@ -61,8 +62,8 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
                
                for(int i=0; i<20;i++)
                  printf("%d ", tmp[i]); 
-               free(a0);
-	  free(a); free(b); free(b0); free(tmp); free(tmp1); 
+           //    free(a0);
+	 // free(a); free(b); free(b0); free(tmp); free(tmp1); 
              return EXIT_SUCCESS;
              
     }
