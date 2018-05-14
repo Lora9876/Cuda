@@ -3,6 +3,7 @@
 #include<stdlib.h>
 #include<math.h>
 #include<unistd.h>
+#include <time.h>
 
 #include<cuda_runtime.h>
 
@@ -174,9 +175,12 @@ int main()
 	
 	printf("%f\n", b1);
 	printf("%f\n", theta1);
-	
+	startStopwatch();
+
  	read_the_files(); 
-	
+	// do some calculations
+stopStopwatch();
+printf("%lf", timeMesuredInSeconds);
 	return EXIT_SUCCESS;
 }
 
