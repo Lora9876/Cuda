@@ -37,8 +37,17 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 			for(int i=yind; i<max_y; i++)
        	
 			{ angle = sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[i]);
-			angle=-0.69813170079773212 * angle * angle- 0.87266462599716477) * angle+ 1.5707963267948966	;
-				shared[int(angle/0.25)]++ ;
+			 angle = abs(angle);
+ 			 float ret = -0.0187293;
+ 				 ret = ret * angle;
+  					ret = ret + 0.0742610;
+ 						 ret = ret * angle;
+                                                   ret = ret - 0.2121144;
+ 								 ret = ret * angle;
+  									ret = ret + 1.5707288;
+  										ret = ret * sqrt(1.0-x);
+ 											
+				shared[int(ret/0.25)]++ ;
 			//nadji nacin da atomic add proradi :D
 			//atomicAdd(&shared[int(angle)],1); 
 				}
