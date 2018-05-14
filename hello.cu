@@ -15,9 +15,11 @@ const int thread= 256;
 const int bins=720; 
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float *b1, int xind, int yind, int max_x, int max_y, volatile int *histi)
 {
-	int idx = blockIdx.x * blockDim.x + threadIdx.x; // ovo proveri
+	int idx = blockIdx.x * blockDim.x + threadIdx.x;// ovo proveri
 	float angle; 
-    idx += xind;
+   	int idy = blockIdx.y * blockDim.y + threadIdx.y;
+	
+	
  __shared__ unsigned int shared[bins];
     // za prvu petlju ocistis uvek
     if(threadIdx.x==0)
@@ -32,19 +34,17 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
        
       //provera
 
-        for(int i=0; i<max_y; i++)
-        {
+       
            
                 
 		
-                angle = acos(sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[0]));
+                angle = acos(sin(b0[idx]) *sin(b1[idy]) + cos(b0[idy]) * cos(b1[idy]) * cos(a0[idx]-a1[idy]));
 		
 		shared[int(angle/0.25)]++ ;
-		//how to put angle
-             //  int *p= &shared[angle];
+		//nadji nacin da atomic add proradi :D
 		//atomicAdd(&shared[int(angle)],1); 
 	
-	}
+	
 	
 	
 	
@@ -94,6 +94,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     dim3 grid, block;
     
     grid.x = 1024; 
+	 grid.y=1024;
 	// grid.y=1024; 
     block.x = 1; 
 	 float *aa1, *bb1, *aa0, *bb0; 
