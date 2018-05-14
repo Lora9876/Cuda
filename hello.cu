@@ -34,7 +34,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     {
        
       //provera
-			for(int i=0; i<max_y; i++)
+			for(int i=yind; i<max_y; i++)
        	
 			{ angle = acos(sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[i]));
 		
@@ -77,11 +77,11 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
         fscanf(real_g, "%e %e", &a0[i], &b0[i]);
        fscanf(synthetic_g, "%e %e", &a1[i], &b1[i]);
     }	
-	for(int i=0; i<galaxies_r; i++)
+	/*for(int i=0; i<galaxies_r; i++)
 	{
 		a0[i]=a1[i]=b0[i]=b1[i]=0.5; 
 	
-	}
+	}*/
 	 fclose(real_g);
 	 fclose(synthetic_g);
 //for(int i=0; i<galaxies_r; i++) printf("%f", a0[i]);
