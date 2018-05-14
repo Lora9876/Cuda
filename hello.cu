@@ -45,7 +45,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
                                                    ret = ret - 0.2121144;
  								 ret = ret * angle;
   									ret = ret + 1.5707288;
-  										ret = ret * sqrt(1.0-x);
+  										ret = ret * sqrt(1.0-angle);
  											
 				shared[int(ret/0.25)]++ ;
 			//nadji nacin da atomic add proradi :D
