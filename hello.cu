@@ -84,7 +84,12 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
        
         fscanf(real_g, "%f %f", &a0[i], &b0[i]);
        fscanf(synthetic_g, "%f %f", &a1[i], &b1[i]);
-    }		    
+    }	
+	 for(int i=0; i<galaxies_r; i++)
+	 {
+	 	printf("%d", b0[i]); 
+	 
+	 }
 //for(int i=0; i<galaxies_r; i++) printf("%f", a0[i]);
 	 
     dim3 grid, block;
