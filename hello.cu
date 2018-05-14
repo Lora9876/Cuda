@@ -18,12 +18,12 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 {
 	int idx = blockIdx.x * blockDim.x + threadIdx.x;// ovo proveri
 	float angle; 
-   	
+   	idx+=xind; 
 	
 	
  __shared__ unsigned int shared[bins];
     // za prvu petlju ocistis uvek
-    if(threadIdx.x==0 & threadIdx.y==0)
+    if(threadIdx.x==0)
     {
         for (int i=0;i<bins;i++)
             shared[i] = 0;
