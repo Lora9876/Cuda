@@ -44,7 +44,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 			}
     __syncthreads();
 
-    if(threadIdx.x==0& threadIdx.y==0)
+    if(threadIdx.x==0)
     {
         for(int i=0;i<bins;i++)
             histi[i]=shared[i];
