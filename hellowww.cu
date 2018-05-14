@@ -43,12 +43,7 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
                 
                for(int i=0; i<20;i++)
                { a[i]= i+1; b[i]=i+2; tmp[i]=0;}
-               cudaMalloc((void **) &a0, 20* sizeof(float));
-               cudaMalloc((void **) &b0, 20* sizeof(float));
-                cudaMalloc((void **) &tmp1, 20* sizeof(float));
-               cudaMemset(a0,0,20* sizeof(float));
-                cudaMemset(b0,0,20* sizeof(float));
-               cudaMemset(tmp1,0,20* sizeof(float));
+            
                cudaMemcpy(a0, a, 20* sizeof(float), cudaMemcpyHostToDevice );
                cudaMemcpy(b0, b,20* sizeof(float), cudaMemcpyHostToDevice );
                 dim3 grid, block;
