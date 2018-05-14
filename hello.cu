@@ -35,7 +35,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
       //provera
 			for(int i=yind; i<max_y; i++)
        	
-			{ angle = (sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[i]));
+			{ angle = acos(sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[i]));
 		
 				shared[int(angle/0.25)]++ ;
 			//nadji nacin da atomic add proradi :D
