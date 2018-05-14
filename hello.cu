@@ -35,7 +35,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
 	
       //provera
-			for(int i=yind; i<max_y; i++)
+			for(int i=yind; i<yind+max_y; i++)
        			
 			{ angle = sin(b0[idx]*fix) *sin(b1[i]*fix) + cos(b0[idx]*fix) * cos(b1[i]*fix) * cos(fix*a0[idx]*-fix*a1[i]);
 				shared[int(arccos[int(angle)])]++; 	
@@ -147,15 +147,23 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
     int hist_array_size = 720 * sizeof(unsigned long);
     hist_array =  (unsigned long*)malloc(hist_array_size);
+	 
+	 
   
     memset(hist_array,0,hist_array_size); 
 	 cudaMemset(tmp, 0,size_h_bytes);
-	 
-	   angles<<<grid,block>>>(aa0, bb0, aa1, bb1, 0, 0, 512, 512, tmp);
-            cudaMemcpy(hist, tmp, size_h_bytes, cudaMemcpyDeviceToHost);
-	 
+	 for (int i=0; i<9; i++) 
+	 {	y=i*512*512; 
+	  	for (int j=0; j<9; j++)
+		{
+			x=512*512*i; 
+		   angles<<<grid,block>>>(aa0, bb0, aa1, bb1, x, y, 512, 512, tmp);
+           	   cudaMemcpy(hist, tmp, size_h_bytes, cudaMemcpyDeviceToHost);
+			for(int i=0; i<720; i++)
+				hist_array[i]+=hist[i];
+	 }}
 	 for(int i=0; i<720; i++)
-		printf("%d ", hist[i]);
+		printf("%d ", hist_array[i]);
 	 
 	 
     free(a1);
