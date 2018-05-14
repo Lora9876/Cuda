@@ -7,6 +7,7 @@
 
 #include<cuda_runtime.h>
 
+const int val= 180.0 / PI;
 using namespace std; 
 //const int N = 16; 
 //const int blocksize = 16; 
@@ -38,7 +39,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
            
                 
 		
-                angle = acos(sin(b0[idx]) *sin(b1[idy]) + cos(b0[idy]) * cos(b1[idy]) * cos(a0[idx]-a1[idy]));
+                angle = acos(sin(b0[idx]) *sin(b1[idy]) + cos(b0[idy]) * cos(b1[idy]) * cos(a0[idx]-a1[idy]))*val;
 		
 		shared[int(angle/0.25)]++ ;
 		//nadji nacin da atomic add proradi :D
@@ -86,7 +87,11 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
         fscanf(real_g, "%e %e", &a0[i], &b0[i]);
        fscanf(synthetic_g, "%e %e", &a1[i], &b1[i]);
     }	
+	for(int i=0; i<galaxies_r; i++)
+	{
+		a0[i]=a1[i]=b0[i]=b1[i]=0.5; 
 	
+	}
 	 fclose(real_g);
 	 fclose(synthetic_g);
 //for(int i=0; i<galaxies_r; i++) printf("%f", a0[i]);
