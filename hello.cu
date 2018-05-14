@@ -87,8 +87,8 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     }	
 	 for(int i=0; i<galaxies_r; i++)
 	 {
-	 	printf("%e", a0[i]); 
-		 printf("%e", b1[i]); 
+	 	printf("%e", a1[i]); 
+		 printf("%e", b0[i]); 
 		
 	 
 	 }
