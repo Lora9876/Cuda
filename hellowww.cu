@@ -27,6 +27,7 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
              
     __syncthreads();
 	shared[0]+=idx; 
+	shared[1]+=idy;
 }
              
              
