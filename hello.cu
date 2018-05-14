@@ -154,6 +154,19 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	 
 	 for(int i=0; i<720; i++)
 		printf("%d ", hist[i]);
+	  free(h_alpha0);
+	 
+    free(a1);
+    free(b1);
+    free(a0);
+    free(b0);
+
+    cudaFree(aa1);
+    cudaFree(aa0);  
+    cudaFree(bb0);
+    cudaFree(bb1);  
+    cudaFree(tmp);
+
  }
  //prepration for the kernel
 	 
