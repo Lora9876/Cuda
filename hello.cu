@@ -195,7 +195,7 @@ int main()
     for (int i=-1; i<1; i+=2/180)
 	    printf("%d," , acos(i)*val); 
 		
- 	read_the_files(); 
+ 	//read_the_files(); 
 	// do some calculations
  	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
