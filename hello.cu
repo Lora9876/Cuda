@@ -13,6 +13,7 @@ using namespace std;
 //const int blocksize = 16; 
 //const int  SUBMATRIX_SIZE=16384 ;
 const int thread= 256; 
+const float fix 1/60 * PI *180; 
 const int bins=720; 
 
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float *b1, int xind, int yind, int max_x, int max_y, volatile int *histi)
@@ -35,18 +36,9 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	
       //provera
 			for(int i=yind; i<max_y; i++)
-       	
-			{ angle = sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]-a1[i]);
-			 angle = abs(angle);
- 			 float ret = -0.0187293;
- 				 ret = ret * angle;
-  					ret = ret + 0.0742610;
- 						 ret = ret * angle;
-                                                   ret = ret - 0.2121144;
- 								 ret = ret * angle;
-  									ret = ret + 1.5707288;
-  										ret = ret * sqrt(1.0-angle);
- 											
+       			
+			{ angle = sin(b0[idx]*fix) *sin(b1[i]*fix) + cos(b0[idx]*fix) * cos(b1[i]*fix) * cos(fix*a0[idx]*-fix*a1[i]);
+			
 				shared[int(ret/0.25)]++ ;
 			//nadji nacin da atomic add proradi :D
 			//atomicAdd(&shared[int(angle)],1); 
