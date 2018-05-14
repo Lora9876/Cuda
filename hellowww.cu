@@ -26,8 +26,9 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
 	 m=  a0[idx] + b1[idy];
              
     __syncthreads();
-	shared[0]+=idx; 
-	shared[1]+=idy;
+	if(idx<20)
+	shared[idx]+=m; 
+	
 }
              
              
@@ -55,7 +56,7 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
                 	 grid.y=1024;
 
                           block.x = 1; 
-                angles<<<grid,block>>>(a0, b0, tmp1);
+                angles<<<block, grid>>>(a0, b0, tmp1);
            	   cudaMemcpy(tmp, tmp1, 20*sizeof(float), cudaMemcpyDeviceToHost);
                
                for(int i=0; i<20;i++)
