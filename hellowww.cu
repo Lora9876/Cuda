@@ -14,7 +14,7 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
   
   __shared__ unsigned int shared[20];
     		// za prvu petlju ocistis uvek
-    			if((threadIdx.x==0) && (threadIdx.y==0)
+    			if((threadIdx.x==0) && (threadIdx.y==0))
    			 {
        			 for (int i=0;i<20;i++)
          		   shared[i] = 0;
@@ -24,7 +24,7 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
 
   if(idx<20 && idy<20)
              {int shared[idx]+= a0[idx] + b0[idy];}
-   __syncthreads();
+   
              }
              
   int main()
