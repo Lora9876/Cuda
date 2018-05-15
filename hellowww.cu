@@ -31,7 +31,7 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 				{
 					m=A[idx]*B[i];
 					n=int(m); 
-					mn[threadIdx.x]++ ;
+					mn[blockDim.x]++ ;
 					 
 				}
  							
@@ -72,7 +72,7 @@ cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 
-	int thr=512;
+	int thr=1024;
 	int blocksInGrid=32; 
 	
 VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
