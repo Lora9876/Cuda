@@ -19,31 +19,19 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
  		int n; 
  		float *addr; 
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
-			__shared__ float sab[720*16384]; 
 			
- 			if(threadIdx.x==0)
-			{	
-					for(int i=0; i<720; i++) sab[i]=0; 
-			}	
 	
     __syncthreads();
 	
 			if (idx<10000)
 				for(int i=0; i<10000; i++)
 				{
-					sab[idx]= A[idx]*B[i];
+					C[idx]= A[idx]*B[i];
 					 
 				}
  							
-	 __syncthreads();
- 		if(threadIdx.x==0)
-   	 {
-        for(int i=0;i<720;i++)
-            C[i+(blockIdx.x*720)]=sab[i];
-    }
 	
-	
-	
+ 
 
 }
 // CPU Host code
