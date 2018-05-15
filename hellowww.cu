@@ -11,6 +11,10 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 {
 int i = blockDim.x * blockIdx.x + threadIdx.x;
 	int j= blockDim.y*blockIdx.y + threadIdx.y;
+	
+	if(i==0) 
+		for(int i=0; i<20; i++)
+			C[i]=0; 
 if (i < N )
 	if(j<20)
 		C[i] = C[i]+ j;
