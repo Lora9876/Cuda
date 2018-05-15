@@ -11,6 +11,7 @@
 
 __global__ void VecAdd(float* A, float* B, float* C, int N)
 {		float m;
+ 		int n; 
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
 			__shared__ float sab[720]; 
 			
@@ -25,7 +26,8 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 				for(int i=0; i<10000; i++)
 				{
 					m= A[idx]*B[i];
- 					atomicAdd(&sab[int(m)],1) ;
+					n= int(m); 
+ 					atomicAdd(sab+n,1) ;
 				}
  							
 	 __syncthreads();
