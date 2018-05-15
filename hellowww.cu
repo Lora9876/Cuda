@@ -10,7 +10,10 @@
 __global__ void VecAdd(float* A, float* B, float* C, int N)
 {
 int i = blockDim.x * blockIdx.x + threadIdx.x;
-if (i < N) C[i] = A[i] + B[i];
+	int j= blockDim.y*blockIdx.y + threadIdx.y;
+if (i < N )
+	if(j<20)
+		C[i] = A[i] + B[i]+j;
 }
 // CPU Host code
 int main(int argc, char *argv[])
@@ -30,9 +33,11 @@ float* d_C; cudaMalloc(&d_C, arraybytes);
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
-int threadsInBlock = 256;
-int blocksInGrid = (N + threadsInBlock - 1) / threadsInBlock;
-VecAdd<<<blocksInGrid, threadsInBlock>>>(d_A, d_B, d_C, N);
+dim3 thr;	
+ thr.x = 256;
+	thr.y=256; 
+int blocksInGrid = 1;
+VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
 // Copy result from device memory to host memory
 // h_C contains the result in host memory
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
