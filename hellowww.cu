@@ -44,7 +44,7 @@ cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<20; i++)
 	{printf("%f  ", h_A[i]); printf("%f  ", h_B[i]);
-		printf("%f\n", h_C[i]); }
+		printf("%f\n", h_C[i]); h_C[i]=0;  }
 // Free device memory
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);
