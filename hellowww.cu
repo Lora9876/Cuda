@@ -40,13 +40,13 @@ int main(int argc, char *argv[])
 	printf("%d\n", prop.maxThreadsPerMultiProcessor); 
     
 
-int N =50;
+int N =1024;
 size_t arraybytes = N * sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
 float* h_C = (float*)malloc(arraybytes); 
-	for(int i=0; i<50; i++)
+	for(int i=0; i<1024; i++)
 	{ h_A[i]=i; h_B[i]=i+1;  }
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
@@ -66,8 +66,8 @@ VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
 // h_C contains the result in host memory
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
-	for(int i=0; i<50; i++)
-	{printf("%f  ", h_A[i]); printf("%f  ", h_B[i]);
+	for(int i=0; i<1024; i++)
+	{printf("%f  ", h_A[i]); /*printf("%f  ", h_B[i]*/);
 		printf("%f\n", h_C[i]); h_C[i]=0;  }
 // Free device memory
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
