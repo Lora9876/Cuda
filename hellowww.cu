@@ -5,66 +5,62 @@
 #include<math.h>
 #include<unistd.h>
 #include <time.h>
+#include "device_functions.h"
+#include "cuda.h"
 #include<cuda_runtime.h>
 
 __global__ void VecAdd(float* A, float* B, float* C, int N)
-{
-int i = blockDim.x * blockIdx.x + threadIdx.x;
-	int j= blockIdx.x %10 ;
-	int k=blockIdx.x/10; 
-	float tmp; 
-	__shared__ float mnozenja[5]; 
+{		float m;
+		int idx = blockDim.x * blockIdx.x + threadIdx.x;
 	
-	tmp=A[k*1024+i] + B[j*1024+i] ;
-	C[i]= blockIdx.x; 
-
-	/*mnozenja[threadIdx.x]=mnozenja[threadIdx.x]+1; 
-	__syncthreads();
-			   
-	if(i==0)
-			   C[i]=mnozenja[i]; */
+			if(threadIdx.x==0)
+			{	__shared__ float sab[720]; 
+					for(int i=0; i<720; i++) sab[i]=0; 
+			}	
 	
-		
+    __syncthreads();
+	
+			if (i<10000)
+				for(int i=0; i<10000; i++)
+				{
+					m= A[idx]*B[i];
+ 					atomicAdd(sab[int(m)],1) ;
+				}
+ 							
+	 __syncthreads();
+ 		if(threadIdx.x==0)
+   	 {
+        for(int i=0;i<720;i++)
+            C[i+(blockIdx.x*720)]=sab[i];
+    }
+	
+	
+	
 
 }
 // CPU Host code
 int main(int argc, char *argv[])
 {
 	
-	 int numBlocks;        // Occupancy in terms of active blocks
-    int blockSize = 32;
-
-    // These variables are used to convert occupancy to warps
-    int device;
-    cudaDeviceProp prop;
-    int activeWarps;
-    int maxWarps;
-
-    cudaGetDevice(&device);
-    cudaGetDeviceProperties(&prop, device);
-    
+	 
     
 
-   // activeWarps = numBlocks * blockSize / prop.warpSize;
-   // maxWarps = prop.maxThreadsPerMultiProcessor / prop.warpSize;
-
-   printf("%d\n", prop.warpSize); 
-	printf("%d\n", prop.maxThreadsPerMultiProcessor); 
-    
-
-int N =10240;
+int N =10000;
 size_t arraybytes = N * sizeof(float);
-	size_t arraybytes1 = 5* sizeof(float);
+	size_t arraybytes1 = 720*16384 sizeof(float);
+	size_t l=720*sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
-float* h_C = (float*)malloc(arraybytes); 
-	for(int i=0; i<10240; i++)
+float* h_C = (float*)malloc(arraybytes1); 
+	float* result=(float*)malloc(l); 
+	
+	for(int i=0; i<10000; i++)
 	{ h_A[i]=1; h_B[i]=1;  }
 	h_A[0]=5; h_B[1] =3; 
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
-float* d_C; cudaMalloc(&d_C, arraybytes);
+float* d_C; cudaMalloc(&d_C, arraybytes1);
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
@@ -74,17 +70,19 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 	thr.y=256; 
  blocksInGrid.x = 1;*/
 	//dim3 thr(1024), blocksInGrid(100);
-	thr=1024;
-	blocksInGrid=100; 
+	thr=512;
+	blocksInGrid=32; 
 	
 VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
 // Copy result from device memory to host memory
 // h_C contains the result in host memory
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
-	for(int i=0; i<1024; i++)
-	{//printf("%f  ", h_A[i]); 
-		printf("%f ", h_C[i]);   }
+	for(int i=0; i<720*16384; i++)
+	{	result[i%720]+= d_C[i]; } 
+		
+		for(int i=0; i<720*16384; i++)
+		printf("%f ", result[i]);   
 // Free device memory
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);
