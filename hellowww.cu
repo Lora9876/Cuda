@@ -10,21 +10,21 @@
 __global__ void VecAdd(float* A, float* B, float* C, int N)
 {
 int i = blockDim.x * blockIdx.x + threadIdx.x;
-	int j= blockDim.y*blockIdx.y + threadIdx.y;
 	
-	if(j<N)
-	C[i] = 120+j;
+	if (i<50)
+		C[i]= 250; 
+
 }
 // CPU Host code
 int main(int argc, char *argv[])
 {
-int N =20;
+int N =50;
 size_t arraybytes = N * sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
 float* h_C = (float*)malloc(arraybytes); 
-	for(int i=0; i<20; i++)
+	for(int i=0; i<50; i++)
 	{ h_A[i]=i; h_B[i]=i+1;  }
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
@@ -37,14 +37,14 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // thr.x = 256;
 	thr.y=256; 
  blocksInGrid.x = 1;*/
-	dim3 thr(1024,1024), blocksInGrid(1);
+	dim3 thr(32,32), blocksInGrid(1);
 	
 VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
 // Copy result from device memory to host memory
 // h_C contains the result in host memory
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
-	for(int i=0; i<20; i++)
+	for(int i=0; i<50; i++)
 	{printf("%f  ", h_A[i]); printf("%f  ", h_B[i]);
 		printf("%f\n", h_C[i]); h_C[i]=0;  }
 // Free device memory
