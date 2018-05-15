@@ -22,7 +22,7 @@ float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
 float* h_C = (float*)malloc(arraybytes); 
 	for(int i=0; i<20; i++)
-	{ h_A[i]=i; h_B[i]=i+1; }
+	{ h_A[i]=i; h_B[i]=i+1; printf("%f", h_A[i]); printf("%f", h_B[i]); }
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
 float* d_C; cudaMalloc(&d_C, arraybytes);
@@ -38,7 +38,7 @@ VecAdd<<<blocksInGrid, threadsInBlock>>>(d_A, d_B, d_C, N);
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<20; i++)
-		printf("%d", h_C[i]); 
+		printf("%f", h_C[i]); 
 // Free device memory
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 // Free host memory ...
