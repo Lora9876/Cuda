@@ -20,11 +20,9 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
 
   if(idx<20)
 	  for(int i=0; i<20;i++) 
-	 m=  a0[idx] + b1[i];
+	 histi[i]=  a0[idx] + b1[i];
              
-    __syncthreads();
-	if(idx<20)
-	histi[idx]+=m; 
+
 	
 }
              
