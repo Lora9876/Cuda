@@ -24,7 +24,7 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 				for(int i=0; i<10000; i++)
 				{
 					m= A[idx]*B[i];
- 					atomicAdd(sab[int(m)],1) ;
+ 					atomicAdd(&sab[int(m)],1) ;
 				}
  							
 	 __syncthreads();
