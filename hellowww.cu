@@ -20,7 +20,7 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 	
     __syncthreads();
 	
-			if (i<10000)
+			if (idx<10000)
 				for(int i=0; i<10000; i++)
 				{
 					m= A[idx]*B[i];
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
 int N =10000;
 size_t arraybytes = N * sizeof(float);
-	size_t arraybytes1 = 720*16384 sizeof(float);
+	size_t arraybytes1 = 720*16384 *sizeof(float);
 	size_t l=720*sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
@@ -70,8 +70,8 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 	thr.y=256; 
  blocksInGrid.x = 1;*/
 	//dim3 thr(1024), blocksInGrid(100);
-	thr=512;
-	blocksInGrid=32; 
+	int thr=512;
+	int blocksInGrid=32; 
 	
 VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
 // Copy result from device memory to host memory
