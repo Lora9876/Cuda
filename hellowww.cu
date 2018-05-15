@@ -9,7 +9,7 @@
 #include "cuda.h"
 #include<cuda_runtime.h>
 #define SUBMATRIX_SIZE 16384
-
+#include <time.h>
 
 
             
@@ -74,15 +74,22 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 
 	int thr=1024;
 	int blocksInGrid=32; 
-	
+	clock_t start, end;
+     double cpu_time_used;
+     
+     start = clock();
+    
+ 	
 VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
-// Copy result from device memory to host memory
-// h_C contains the result in host memory
+
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<720*16384; i++)
 	{	result[i%720]+= h_C[i]; } 
-		
+	
+		end = clock();
+     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+	printf("%f", cpu_time_used); 
 		for(int i=0; i<720; i++)
 			//if(result[i]>0)
 		printf("%f ", result[i]);   
