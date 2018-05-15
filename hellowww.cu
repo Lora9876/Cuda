@@ -11,13 +11,13 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 {
 int i = blockDim.x * blockIdx.x + threadIdx.x;
 	int j= blockIdx.x %10 ;
-	int k=blockIdx/10; 
+	int k=blockIdx.x/10; 
 	float tmp; 
 	__shared__ float mnozenja[5]; 
 	
 	tmp=A[k*1024+i] + B[j*1024+i] ;
 	
-	atomicAdd(mnozenja[int(tmp)], 1)
+	mnozenja[int(tmp)]=mnozenja[int(tmp)]+1; 
 	__syncthreads();
 			   
 	if(i==0)
