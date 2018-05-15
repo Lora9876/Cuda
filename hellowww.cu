@@ -36,7 +36,7 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 dim3 thr;	
  thr.x = 256;
 	thr.y=256; 
-int blocksInGrid = 1;
+dim3 blocksInGrid.x = 1;
 VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
 // Copy result from device memory to host memory
 // h_C contains the result in host memory
