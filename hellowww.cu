@@ -16,7 +16,7 @@ int i = blockDim.x * blockIdx.x + threadIdx.x;
 	__shared__ float mnozenja[5]; 
 	
 	tmp=A[k*1024+i] + B[j*1024+i] ;
-	C[i]= blockIdx; 
+	C[i]= blockIdx.x; 
 
 	/*mnozenja[threadIdx.x]=mnozenja[threadIdx.x]+1; 
 	__syncthreads();
