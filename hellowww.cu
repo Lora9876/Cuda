@@ -7,6 +7,53 @@
 #include <time.h>
 #include<cuda_runtime.h>
 
+__global__ void VecAdd(float* A, float* B, float* C, int N)
+{
+int i = blockDim.x * blockIdx.x + threadIdx.x;
+if (i < N) C[i] = A[i] + B[i];
+}
+// CPU Host code
+int main(int argc, char *argv[])
+{
+int N =20;
+size_t arraybytes = N * sizeof(float);
+// Allocate input vectors h_A and h_B in host memory
+float* h_A = (float*)malloc(arraybytes);
+float* h_B = (float*)malloc(arraybytes);
+float* h_C = (float*)malloc(arraybytes); 
+	for(int i=0; i<20; i++)
+	{ h_A[i]=i; h_B[i]=i+1; }
+float* d_A; cudaMalloc(&d_A, arraybytes);
+float* d_B; cudaMalloc(&d_B, arraybytes);
+float* d_C; cudaMalloc(&d_C, arraybytes);
+// Copy arrays from host memory to device memory
+cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
+cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
+// Invoke kernel
+int threadsInBlock = 256;
+int blocksInGrid = (N + threadsInBlock - 1) / threadsInBlock;
+VecAdd<<<blocksInGrid, threadsInBlock>>>(d_A, d_B, d_C, N);
+// Copy result from device memory to host memory
+// h_C contains the result in host memory
+cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
+	
+	for(int i=0; i<20; i++)
+		printf("%d", h_C[i]); 
+// Free device memory
+cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
+// Free host memory ...
+}
+
+
+
+
+
+
+
+
+
+
+/*
 __global__ void angles(volatile float *a0, volatile float *b1, volatile float *histi)
 {
   int idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -59,4 +106,4 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
              return EXIT_SUCCESS;
              
     }
-  
+  */
