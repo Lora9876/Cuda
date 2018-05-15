@@ -23,7 +23,7 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 	
     __syncthreads();
 	
-			if (idx<512)
+			if (idx<10000)
 				for(int i=0; i<10000; i++)
 				{
 					m= A[idx]*B[i];
@@ -82,10 +82,10 @@ VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
 // h_C contains the result in host memory
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
-	for(int i=0; i<720*16384; i++)
+	for(int i=0; i<720*8192; i++)
 	{	result[i%720]+= d_C[i]; } 
 		
-		for(int i=0; i<720*16384; i++)
+		for(int i=0; i<720*8192; i++)
 		printf("%f ", result[i]);   
 // Free device memory
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
