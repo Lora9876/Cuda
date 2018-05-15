@@ -17,7 +17,7 @@ int i = blockDim.x * blockIdx.x + threadIdx.x;
 			C[i]=0; 
 if (i < N )
 	if(j<20)
-		C[i] = C[i]+ j;
+		C[i] = C[i]+ j+2;
 }
 // CPU Host code
 int main(int argc, char *argv[])
