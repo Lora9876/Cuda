@@ -12,7 +12,7 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 int i = blockDim.x * blockIdx.x + threadIdx.x;
 	int j= threadIdx.y; 
 	
-		C[i]= 2; C[j]= C[j]+ 126; 
+		C[i]= 2; C[j]= C[j]+i; 
 
 }
 // CPU Host code
