@@ -10,9 +10,20 @@
 __global__ void VecAdd(float* A, float* B, float* C, int N)
 {
 int i = blockDim.x * blockIdx.x + threadIdx.x;
-	int j= threadIdx.y; 
+	int j= blockIdx.x %10 ;
+	int k=blockIdx/10; 
+	float tmp; 
+	__shared__ float mnozenja[5]; 
 	
-		C[i]=C[i]; 
+	tmp=A[k*1024+i] + B[j*1024+i] ;
+	
+	atomicAdd(mnozenja[int(tmp)], 1)
+	__syncthreads();
+			   
+	if(i==0)
+			   C[i]=mnozenja[i]; 
+	
+		
 
 }
 // CPU Host code
@@ -40,17 +51,19 @@ int main(int argc, char *argv[])
 	printf("%d\n", prop.maxThreadsPerMultiProcessor); 
     
 
-int N =1024;
+int N =10240;
 size_t arraybytes = N * sizeof(float);
+	size_t arraybytes1 = 5* sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
-float* h_C = (float*)malloc(arraybytes); 
-	for(int i=0; i<1024; i++)
-	{ h_A[i]=i; h_B[i]=i+1;  }
+float* h_C = (float*)malloc(arraybytes1); 
+	for(int i=0; i<10240; i++)
+	{ h_A[i]=1; h_B[i]=1;  }
+	h_A[0]=5; h_B[1] =3; 
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
-float* d_C; cudaMalloc(&d_C, arraybytes);
+float* d_C; cudaMalloc(&d_C, arraybytes1);
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
@@ -59,16 +72,16 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // thr.x = 256;
 	thr.y=256; 
  blocksInGrid.x = 1;*/
-	dim3 thr(32,32), blocksInGrid(1);
+	dim3 thr(1024), blocksInGrid(100);
 	
 VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
 // Copy result from device memory to host memory
 // h_C contains the result in host memory
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
-	for(int i=0; i<1024; i++)
-	{printf("%f  ", h_A[i]); 
-		printf("%f\n", h_C[i]); h_C[i]=0;  }
+	for(int i=0; i<5; i++)
+	{//printf("%f  ", h_A[i]); 
+		printf("%f\n", h_C[i]);   }
 // Free device memory
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);
