@@ -67,7 +67,7 @@ VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<1024; i++)
-	{printf("%f  ", h_A[i]); /*printf("%f  ", h_B[i]*/);
+	{printf("%f  ", h_A[i]); 
 		printf("%f\n", h_C[i]); h_C[i]=0;  }
 // Free device memory
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
