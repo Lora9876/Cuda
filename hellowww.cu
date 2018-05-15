@@ -26,7 +26,9 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 			if (idx<10000)
 				for(int i=0; i<10000; i++)
 				{
-					C[idx]= A[idx]*B[i];
+					m=A[idx]*B[i];
+					n=int(m); 
+					C[n]++ ;
 					 
 				}
  							
