@@ -34,6 +34,9 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
                a= (float*) malloc(20* sizeof(float));
                b= (float*) malloc(20*sizeof(float));
                  tmp= (float*) malloc(20*sizeof(float));
+	  a0= (float*) malloc(20* sizeof(float));
+               b0= (float*) malloc(20*sizeof(float));
+                 tmp1= (float*) malloc(20*sizeof(float));
                 
                for(int i=0; i<20;i++)
                { a[i]= i+1; b[i]=i+2; tmp[i]=0;}
