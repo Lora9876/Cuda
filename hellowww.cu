@@ -18,6 +18,31 @@ int i = blockDim.x * blockIdx.x + threadIdx.x;
 // CPU Host code
 int main(int argc, char *argv[])
 {
+	
+	 int numBlocks;        // Occupancy in terms of active blocks
+    int blockSize = 32;
+
+    // These variables are used to convert occupancy to warps
+    int device;
+    cudaDeviceProp prop;
+    int activeWarps;
+    int maxWarps;
+
+    cudaGetDevice(&device);
+    cudaGetDeviceProperties(&prop, device);
+    
+    cudaOccupancyMaxActiveBlocksPerMultiprocessor(
+        &numBlocks,
+        MyKernel,
+        blockSize,
+        0);
+
+    activeWarps = numBlocks * blockSize / prop.warpSize;
+    maxWarps = prop.maxThreadsPerMultiProcessor / prop.warpSize;
+
+    std::cout << "Occupancy: " << (double)activeWarps / maxWarps * 100 << "%" << std::endl;
+    
+
 int N =50;
 size_t arraybytes = N * sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
