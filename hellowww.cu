@@ -10,94 +10,16 @@
 #include<cuda_runtime.h>
 #define SUBMATRIX_SIZE 16384
 
-void getDeviceDiagnostics(int tot_gals, int n_coords){
-
- ////////////////////////////////////////////////////////////////////////////
-    // Now get the info from the device.
-    ////////////////////////////////////////////////////////////////////////////
-   
-        printf("\n------ CUDA device diagnostics ------\n\n");
-
-        
-        int nx = SUBMATRIX_SIZE;
-        int ncalc = nx * nx;
-        int gpu_mem_needed = int(tot_gals * sizeof(float)) * n_coords; // need to allocate ra, dec.
-        printf("Requirements: %d calculations and %d bytes memory on the GPU \n\n", ncalc, gpu_mem_needed);
-
-        int deviceCount = 0;
-        cudaError_t error_id = cudaGetDeviceCount(&deviceCount);
-        if (error_id != cudaSuccess) {
-            printf( "cudaGetDeviceCount returned %d\n-> %s\n", (int)error_id, cudaGetErrorString(error_id) );
-        }
-        // This function call returns 0 if there are no CUDA capable devices.
-        if (deviceCount == 0)
-            printf("There is no device supporting CUDA\n");
-        else
-            printf("Found %d CUDA Capable device(s)\n", deviceCount);
 
 
-        int dev=0;
-        for (dev = 0; dev < deviceCount; ++dev) {
-            cudaDeviceProp deviceProp;
-            cudaGetDeviceProperties(&deviceProp, dev);
-            printf("\nDevice %d: \"%s\"\n", dev, deviceProp.name);
-
-            printf("  Total amount of global memory:                 %.0f MBytes (%llu bytes)\n",
-                    (float)deviceProp.totalGlobalMem/1048576.0f, (unsigned long long) deviceProp.totalGlobalMem);
-
-
-            printf("  Warp size:                                     %d\n", deviceProp.warpSize);
-            printf("  Maximum number of threads per block:           %d\n", deviceProp.maxThreadsPerBlock);
-            printf("  Maximum sizes of each dimension of a block:    %d x %d x %d\n",
-                    deviceProp.maxThreadsDim[0],
-                    deviceProp.maxThreadsDim[1],
-                    deviceProp.maxThreadsDim[2]);
-            printf("  Maximum sizes of each dimension of a grid:     %d x %d x %d\n",
-                    deviceProp.maxGridSize[0],
-                    deviceProp.maxGridSize[1],
-                    deviceProp.maxGridSize[2]);
-
-            // does this device have enough capcacity for the calculation?
-            printf("\n*************\n");
-
-            // check memory
-            if((unsigned long long) deviceProp.totalGlobalMem < gpu_mem_needed) printf(" FAILURE: Not eneough memeory on device for this calculation! \n");
-            else
-            {
-                printf("Hurrah! This device has enough memory to perform this calculation\n");
-
-                // check # threads
-
-                int threadsPerBlock = deviceProp.maxThreadsPerBlock; // maximal efficiency exists if we use max # threads per block.
-                int blocksPerGrid = int(ceil(ncalc / threadsPerBlock)); // need nx*nx threads total
-                if(deviceProp.maxThreadsDim[0] >blocksPerGrid) printf("FAILURE: Not enough threads on the device to do this calculation!\n");
-                else
-                {
-                    printf("Hurrah! This device supports enough threads to do this calculation\n");
-                    // how many kernels can we run at once on this machine?
-                    int n_mem = floor(deviceProp.totalGlobalMem / float(gpu_mem_needed));
-                    int n_threads = floor(threadsPerBlock * deviceProp.maxThreadsDim[0]*deviceProp.maxThreadsDim[1] / float(ncalc) ); // max # threads possible?
-
-                    printf("%d %d  \n",  n_threads, deviceProp.maxThreadsDim[0]);
-
-                    int max_kernels = 0;
-                    n_mem<n_threads ? max_kernels = n_mem : max_kernels = n_threads;
-
-                    printf(" you can run %d kernels at a time on this device without overloading the resources \n", max_kernels);
-                }
-            }
-
-        }
-
-        printf("\n------ End CUDA device diagnostics ------\n\n");
-    }
+            
 
 __global__ void VecAdd(float* A, float* B, float* C, int N)
 {		float m;
  		int n; 
  		float *addr; 
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
-			__shared__ float sab[720]; 
+			__shared__ float sab[720*16384]; 
 			
  			if(threadIdx.x==0)
 			{	
@@ -109,9 +31,8 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 			if (idx<10000)
 				for(int i=0; i<10000; i++)
 				{
-					m= A[idx]*B[i];
-					n= int(m);
-					sab[n]=sab[n]+1; 
+					sab[idx]= A[idx]*B[i];
+					 
 				}
  							
 	 __syncthreads();
@@ -129,10 +50,9 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 int main(int argc, char *argv[])
 {
 	
- getDeviceDiagnostics(20000,2); 
-    
+ 
 
-/*int N =10000;
+int N =10000;
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 = 720*16384 *sizeof(float);
 	size_t l=720*sizeof(float);
@@ -152,11 +72,7 @@ float* d_C; cudaMalloc(&d_C, arraybytes1);
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
-/*dim3 thr,blocksInGrid;	
-// thr.x = 256;
-	thr.y=256; 
- blocksInGrid.x = 1;
-	//dim3 thr(1024), blocksInGrid(100);
+
 	int thr=512;
 	int blocksInGrid=32; 
 	
@@ -165,14 +81,14 @@ VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
 // h_C contains the result in host memory
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
-	for(int i=0; i<720*8192; i++)
+	for(int i=0; i<720*16384; i++)
 	{	result[i%720]+= d_C[i]; } 
 		
-		for(int i=0; i<720*8192; i++)
+		for(int i=0; i<720*16384; i++)
 		printf("%f ", result[i]);   
 // Free device memory
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
-	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);*/
+	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);
 // Free host memory ...
 	
 }
