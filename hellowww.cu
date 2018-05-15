@@ -33,10 +33,13 @@ float* d_C; cudaMalloc(&d_C, arraybytes);
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
-dim3 thr,blocksInGrid;	
- thr.x = 256;
+/*dim3 thr,blocksInGrid;	
+// thr.x = 256;
 	thr.y=256; 
- blocksInGrid.x = 1;
+ blocksInGrid.x = 1;*/
+	int thr, blocksInGrid;
+	thr=1024; 
+	blocksInGrid=1; 
 VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
 // Copy result from device memory to host memory
 // h_C contains the result in host memory
