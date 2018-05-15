@@ -12,9 +12,10 @@
 __global__ void VecAdd(float* A, float* B, float* C, int N)
 {		float m;
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
-	
-			if(threadIdx.x==0)
-			{	__shared__ float sab[720]; 
+			__shared__ float sab[720]; 
+			
+ 			if(threadIdx.x==0)
+			{	
 					for(int i=0; i<720; i++) sab[i]=0; 
 			}	
 	
