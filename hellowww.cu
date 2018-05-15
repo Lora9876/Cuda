@@ -12,7 +12,7 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 int i = blockDim.x * blockIdx.x + threadIdx.x;
 	int j= threadIdx.y; 
 	if (i<50)
-		C[i]= 250; C[j]= 126; 
+		C[i]= 250; C[j]= C[j]+ 126; 
 
 }
 // CPU Host code
@@ -36,8 +36,8 @@ int main(int argc, char *argv[])
    // activeWarps = numBlocks * blockSize / prop.warpSize;
    // maxWarps = prop.maxThreadsPerMultiProcessor / prop.warpSize;
 
-   printf("%d", prop.warpSize); 
-	printf("%d", prop.maxThreadsPerMultiProcessor); 
+   printf("%d\n", prop.warpSize); 
+	printf("%d\n", prop.maxThreadsPerMultiProcessor); 
     
 
 int N =50;
