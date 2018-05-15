@@ -20,7 +20,7 @@ __global__ void angles(volatile float *a0, volatile float *b1, volatile float *h
 
   if(idx<20)
 	 
-	 histi[idx]=  a0[idx] + b1[idx];
+	 histi[idx]=  5;
              
 
 	
