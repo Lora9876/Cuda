@@ -20,14 +20,14 @@ __global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
  		
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
 		int idy = blockIdx.y*blockDim.y+threadIdx.y;	
-		__shared__ int mn[10000];
- 			if((threadIdx.x==0) & (threadIdx.y==0) )
-				for(int i=0; i<10000; i++)
+		__shared__ int mn[720];
+ 			if(threadIdx.x==0 && threadIdx.y==0)
+				for(int i=0; i<720; i++)
 					mn[i]=0; 
     __syncthreads();
 	
  
- 			if((idx<100) && (idy<100))
+ 			if(idx<100 && idy<100)
 			
 			{	for(int i=0;i<100; i++)
 			{		m=A[100*idx+i]*B[i*100+idy];
@@ -35,15 +35,13 @@ __global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
 					mn[n]++;}}
  
  			
- 	//wait until they're all done						
+ 							
 	__syncthreads();
-	
-   if((threadIdx.x==0) && (threadIdx.y==0) )
+
+    if(threadIdx.x==0 && threadIdx.y==0)
     {
-        for(int i=0;i<10000;i++)
-	{ 	n=mn[i]+(blockIdx.x*720);
-            C[n]= C[n]+1;
-	}
+        for(int i=0;i<720;i++)
+            C[i+(blockIdx.x*720)]=mn[i];
     }
  
 
