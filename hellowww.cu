@@ -96,7 +96,7 @@ int NN=100;
      
      start = clock();
     
- 	VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N,0);
+ 	VecAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, N,0);
 
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
