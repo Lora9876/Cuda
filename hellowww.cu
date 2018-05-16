@@ -32,6 +32,7 @@ __global__ void VecAdd(float* A, float* B, int* C, int N)
 					m=A[idx]*B[i];
 					n=int(m); 
 					mn[n]++;
+					atomicAdd(&mn,1);
 					 
 				}
  							
