@@ -14,7 +14,7 @@
 
             
 
-__global__ void VecAdd(float* A, float* B, float* C, int N)
+__global__ void VecAdd(float* A, float* B, int* C, int N)
 {		float m;
  		int n; 
  		int *addr; 
@@ -42,7 +42,7 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
     if(threadIdx.x==0)
     {
         for(int i=0;i<720;i++)
-            C[i+(blockIdx.x*720)]=float(mn[i]);
+            C[i+(blockIdx.x*720)]=mn[i];
     }
  
 
@@ -55,20 +55,20 @@ int main(int argc, char *argv[])
 
 int N =10000;
 size_t arraybytes = N * sizeof(float);
-	size_t arraybytes1 = 720*16384 *sizeof(float);
+	size_t arraybytes1 = 720*16384 *sizeof(int);
 	size_t l=720*sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
-float* h_C = (float*)malloc(arraybytes1); 
-	float* result=(float*)malloc(l); 
+int* h_C = (int*)malloc(arraybytes1); 
+	int* result=(int*)malloc(l); 
 	
 	for(int i=0; i<10000; i++)
 	{ h_A[i]=1; h_B[i]=1;  }
 	h_A[0]=5; h_B[1] =3; 
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
-float* d_C; cudaMalloc(&d_C, arraybytes1);
+int* d_C; cudaMalloc(&d_C, arraybytes1);
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
@@ -91,10 +91,10 @@ cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
 		end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-	printf("%f", cpu_time_used); 
+	printf("%f\n", cpu_time_used); 
 		for(int i=0; i<720; i++)
 			//if(result[i]>0)
-		printf("%f ", result[i]);   
+		printf("%d ", result[i]);   
 // Free device memory
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);
