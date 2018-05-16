@@ -81,7 +81,7 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
      start = clock();
     
  	
-	VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N,i);
+	VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N,0);
 
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
