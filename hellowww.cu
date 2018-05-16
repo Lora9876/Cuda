@@ -21,7 +21,7 @@ __global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
 		int idy = blockIdx.y*blockDim.y+threadIdx.y;	
 		__shared__ int mn[100];
- 			if(threadIdx.x==0)
+ 			if((threadIdx.x==0) & (threadIdx.y==0) )
 				for(int i=0; i<100; i++)
 					mn[i]=0; 
     __syncthreads();
