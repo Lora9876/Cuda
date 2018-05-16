@@ -14,7 +14,7 @@
 
             
 
-__global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
+__global__ void VecAdd(float* A, float* B, int* C, int* D,int N,int sum)
 {		float m;
  		int n; 
  		
@@ -32,18 +32,21 @@ __global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
 			{	for(int i=0;i<sum; i++)
 			{		m=A[sum*idx+i]*B[i*sum+idy];
 					n=int(m); 
-			 	C[sum*idx+i]=n;
+			 	D[sum*idx+i]=n;
 					//mn[n]++;}}
 			}}
  			
  							
-	/*__syncthreads();
+	__syncthreads();
 
-    if(threadIdx.x==0 )
+    if(threadIdx.x==0 && threadIdx.y=0)
     {
-        for(int i=0;i<720;i++)
-            C[i+(blockIdx.x*720)]=mn[i];
-    }*/
+        for(int i=0;i<10000;i++)
+	{
+          n=D[i];
+		C[n]++; 
+	}
+    }
  
 
 }
@@ -61,6 +64,7 @@ size_t arraybytes = N * sizeof(float);
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
 int* h_C = (int*)malloc(arraybytes); 
+	int* h_D = (int*)malloc(arraybytes); 
 	int* result=(int*)malloc(l); 
 	
 	for(int i=0; i<10000; i++)
@@ -69,6 +73,7 @@ int* h_C = (int*)malloc(arraybytes);
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
 int* d_C; cudaMalloc(&d_C, arraybytes);
+	int* d_D; cudaMalloc(&d_D, arraybytes);
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
@@ -88,7 +93,8 @@ int NN=50;
      
      start = clock();
     cudaMemset(d_C,0,arraybytes);
- 	VecAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, N,NN);
+	 cudaMemset(d_D,0,arraybytes);
+ 	VecAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C,d_D, N,NN);
 
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
