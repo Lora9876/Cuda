@@ -81,11 +81,17 @@ int* d_C; cudaMalloc(&d_C, arraybytes1);
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
-
+int NN=100; 
 	
 	clock_t start, end;
-	dim3 thr(512, 512);
-    dim3 blocksInGrid(1, 1);
+	 dim3 threadsPerBlock(NN, NN);
+    dim3 blocksPerGrid(1, 1);
+        if (NN*NN > 512){
+            threadsPerBlock.x = 512;
+            threadsPerBlock.y = 512;
+            blocksPerGrid.x = ceil(double(NN)/double(threadsPerBlock.x));
+            blocksPerGrid.y = ceil(double(NN)/double(threadsPerBlock.y));
+        }
      double cpu_time_used;
      
      start = clock();
@@ -97,7 +103,10 @@ cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	for(int i=0; i<720*16384; i++)
 	{	result[i%720]+= h_C[i]; } 
 
-		end = clock();
+		
+	
+	
+	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("%f\n", cpu_time_used); 
 		for(int i=0; i<720; i++)
