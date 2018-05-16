@@ -38,7 +38,7 @@ __global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
  	//wait until they're all done						
 	__syncthreads();
 	
-    if(threadIdx.x==0)
+   if((threadIdx.x==0) & (threadIdx.y==0) )
     {
         for(int i=0;i<100;i++)
 	{ 
