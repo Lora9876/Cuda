@@ -29,7 +29,7 @@ __global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
 			if (idx<10000)
 				for(int i=0; i<10000; i++)
 				{
-					m=A[idx]*B[i];
+					m=A[sum*50]*B[i];
 					n=int(m); 
 					mn[n]++;
 					//atomicAdd(mn,1);
@@ -73,21 +73,21 @@ cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 
-	int thr=1024;
-	dim3 blocksInGrid(1024,1024); 
+	int thr=512;
+	int blocksInGrid=64; 
 	clock_t start, end;
      double cpu_time_used;
      
      start = clock();
     
- 	
-	VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N,0);
+ 	for (int i=0;i<50; i++)
+	{VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N,i);
 
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<720*16384; i++)
 	{	result[i%720]+= h_C[i]; } 
-	
+}
 		end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("%f\n", cpu_time_used); 
