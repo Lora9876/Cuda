@@ -17,7 +17,7 @@
 __global__ void VecAdd(float* A, float* B, int* C, int N)
 {		float m;
  		int n; 
- 		int *addr; 
+ 		
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
 			
 		__shared__ int mn[720];
@@ -31,8 +31,6 @@ __global__ void VecAdd(float* A, float* B, int* C, int N)
 				{
 					m=A[idx]*B[i];
 					n=int(m); 
-					//addr=
-					//m[n]++;
 					atomicAdd(&mn[n],1) ;
 					 
 				}
@@ -56,7 +54,7 @@ int main(int argc, char *argv[])
 int N =10000;
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 = 720*16384 *sizeof(int);
-	size_t l=720*sizeof(float);
+	size_t l=720*sizeof(int);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
