@@ -17,10 +17,10 @@
 __global__ void VecAdd(float* A, float* B, float* C, int N)
 {		float m;
  		int n; 
- 		float *addr; 
+ 		int *addr; 
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
 			
-		__shared__ float mn[720];
+		__shared__ int mn[720];
  			if(threadIdx.x==0)
 				for(int i=0; i<720; i++)
 					mn[i]=0; 
@@ -31,9 +31,9 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
 				{
 					m=A[idx]*B[i];
 					n=int(m); 
-					m=1;
+					//addr=
 					//m[n]++;
-					atomicAdd(&mn[n],m) ;
+					atomicAdd(&mn[n],1) ;
 					 
 				}
  							
@@ -42,7 +42,7 @@ __global__ void VecAdd(float* A, float* B, float* C, int N)
     if(threadIdx.x==0)
     {
         for(int i=0;i<720;i++)
-            C[i+(blockIdx.x*720)]=mn[i];
+            C[i+(blockIdx.x*720)]=float(mn[i]);
     }
  
 
