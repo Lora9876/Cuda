@@ -74,7 +74,7 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 
 	int thr=512;
-	int blocksInGrid=64; 
+	int blocksInGrid=512; 
 	clock_t start, end;
      double cpu_time_used;
      
