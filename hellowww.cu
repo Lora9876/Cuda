@@ -41,8 +41,8 @@ __global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
    if((threadIdx.x==0) & (threadIdx.y==0) )
     {
         for(int i=0;i<100;i++)
-	{ 
-            C[mn[i]+(blockIdx.x*720)]++;
+	{ 	n=mn[i]+(blockIdx.x*720);
+            C[n]= C[n]+1;
 	}
     }
  
