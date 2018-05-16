@@ -27,7 +27,7 @@ __global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
     __syncthreads();
 	
  
- 			if(idx<100 && idy<100)
+ 			if((idx<100) & (idy<100))
 			
 			{	for(int i=0;i<100; i++)
 			{		m=A[100*idx+i]*B[i*100+idy];
