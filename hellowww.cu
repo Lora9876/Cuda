@@ -34,7 +34,7 @@ __global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
 					n=int(m); 
 			 	C[sum*idx+i]=n;
 					//mn[n]++;}}
- 
+			}}
  			
  							
 	/*__syncthreads();
