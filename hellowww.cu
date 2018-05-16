@@ -19,14 +19,23 @@ __global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
  		int n; 
  		
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
-			
+		int idy = blockIdx.y*blockDim.y+threadIdx.y;	
 		__shared__ int mn[720];
  			if(threadIdx.x==0)
 				for(int i=0; i<720; i++)
 					mn[i]=0; 
     __syncthreads();
 	
-			if (idx<10000)
+ 
+ 			if(idx<100 && idy<100)
+			
+			{	for(int i=0;i<100; i++)
+			{		m=A[100*idx+i]*B[i*100+idy];
+					n=int(m); 
+					mn[n]++;}}
+ 
+ 			
+/*if (idx<10000)
 				for(int i=0; i<10000; i++)
 				{
 					m=A[sum*50]*B[i];
@@ -34,7 +43,7 @@ __global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
 					mn[n]++;
 					//atomicAdd(mn,1);
 					 
-				}
+				}*/
  							
 	__syncthreads();
 
@@ -73,14 +82,16 @@ cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 
-	int thr=512;
-	int blocksInGrid=64; 
-	clock_t start, end;
+	/*int thr=512;
+	int blocksInGrid=64; */
+	clock_ start, end;
+	dim3 thr(512, 512);
+    dim3 blocksInGrid(1, 1);
      double cpu_time_used;
      
      start = clock();
     
- 	VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N,i);
+ 	VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N,0);
 
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
