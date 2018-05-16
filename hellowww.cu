@@ -14,7 +14,7 @@
 
             
 
-__global__ void VecAdd(float* A, float* B, int* C, int N)
+__global__ void VecAdd(float* A, float* B, int* C, int N,int sum)
 {		float m;
  		int n; 
  		
@@ -26,13 +26,13 @@ __global__ void VecAdd(float* A, float* B, int* C, int N)
 					mn[i]=0; 
     __syncthreads();
 	
-			if (idx<10000)
+			if (idx+sum*57<10000)
 				for(int i=0; i<10000; i++)
 				{
-					m=A[idx]*B[i];
+					m=A[idx+sum*57]*B[i];
 					n=int(m); 
 					mn[n]++;
-					atomicAdd(mn,1);
+					//atomicAdd(mn,1);
 					 
 				}
  							
@@ -80,14 +80,14 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
      
      start = clock();
     
- 	
-VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N);
+ 	for(int i=0; i<176; i++)
+	{VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N,i);
 
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<720*16384; i++)
 	{	result[i%720]+= h_C[i]; } 
-	
+	}
 		end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("%f\n", cpu_time_used); 
