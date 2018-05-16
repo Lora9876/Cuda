@@ -80,14 +80,13 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
      
      start = clock();
     
- 	for (int i=0;i<50; i++)
-	{VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N,i);
+ 	VecAdd<<<blocksInGrid, thr>>>(d_A, d_B, d_C, N,i);
 
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<720*16384; i++)
 	{	result[i%720]+= h_C[i]; } 
-}
+
 		end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("%f\n", cpu_time_used); 
