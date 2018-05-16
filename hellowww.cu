@@ -82,9 +82,8 @@ cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 
-	/*int thr=512;
-	int blocksInGrid=64; */
-	clock_ start, end;
+	
+	clock_t start, end;
 	dim3 thr(512, 512);
     dim3 blocksInGrid(1, 1);
      double cpu_time_used;
