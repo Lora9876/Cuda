@@ -28,7 +28,7 @@ __global__ void VecAdd(float* A, float* B, int* C,int N,int sum)
 					for(int j=0; j<sum; j++) 
 			{		m=A[sum*idx+i]*B[i*sum+j];
 					n=int(m); 
-					 C[1]=++;
+					 C[1]++;
 			 		//C[idx*10000+ idy*sum+i]=n;
 					//mn[n]++;}}
 			}}
