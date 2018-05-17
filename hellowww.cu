@@ -20,11 +20,11 @@ __global__ void VecAdd(float* A, float* B, int* C, int* D,int N,int sum)
  		
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
 		int idy = blockIdx.y*blockDim.y+threadIdx.y;	
-		__shared__ int mn[720];
+	/*	__shared__ int mn[720];
  			if(threadIdx.x==0)
 				for(int i=0; i<720; i++)
 					mn[i]=0; 
-    __syncthreads();
+    __syncthreads();*/
 	
  
  			if(idx<sum && idy<sum)
@@ -32,12 +32,12 @@ __global__ void VecAdd(float* A, float* B, int* C, int* D,int N,int sum)
 			{	for(int i=0;i<sum; i++)
 			{		m=A[sum*idx+i]*B[i*sum+idy];
 					n=int(m); 
-			 	D[sum*idx+i]=n;
+			 		C[sum*idx+i]=n;
 					//mn[n]++;}}
 			}}
  			
  							
-	__syncthreads();
+	/*__syncthreads();
 
     if(idx==0 && idy==0)
     {
@@ -46,7 +46,7 @@ __global__ void VecAdd(float* A, float* B, int* C, int* D,int N,int sum)
           n=D[i];
 		C[n]++; 
 	}
-    }
+    }*/
  
 
 }
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 int N =10000;
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 = 720*16384 *sizeof(int);
-	size_t l=100*sizeof(int);
+	size_t l=720*sizeof(int);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
@@ -99,7 +99,7 @@ int NN=50;
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<10000; i++)
-	{	result[i%100]+= h_C[i]; } 
+	{	angle= h_C[i]; result[angle]++; } 
 
 		
 	
