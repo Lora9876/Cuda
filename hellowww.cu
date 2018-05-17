@@ -34,7 +34,7 @@ __global__ void VecAdd(float* A, float* B, int* C,int N,int sum)
 			}}
  			
  						
- //__syncthreads();
+ __syncthreads();
  
  
 
@@ -48,12 +48,12 @@ int main(int argc, char *argv[])
 int N =10000;
 	int angle; 
 size_t arraybytes = N * sizeof(float);
-	size_t arraybytes1 = 720*16384 *sizeof(int);
+	size_t arraybytes1 = N*N *sizeof(int);
 	size_t l=720*sizeof(int);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
-int* h_C = (int*)malloc(N*arraybytes); 
+int* h_C = (int*)malloc(arraybytes1); 
 	
 	int* result=(int*)malloc(l); 
 	
@@ -62,7 +62,7 @@ int* h_C = (int*)malloc(N*arraybytes);
 	h_A[0]=5; h_B[1] =3; 
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
-int* d_C; cudaMalloc(&d_C, N*arraybytes);
+int* d_C; cudaMalloc(&d_C, arraybytes1);
 	
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
