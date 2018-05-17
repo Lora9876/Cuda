@@ -20,13 +20,7 @@ __global__ void VecAdd(float* A, float* B, int* C,int N,int sum)
  		
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
 		int idy = blockIdx.y*blockDim.y+threadIdx.y;	
- 		//int niz[10000]; 
-	/*	__shared__ int mn[720];
- 			if(threadIdx.x==0)
-				for(int i=0; i<720; i++)
-					mn[i]=0; 
-    __syncthreads();*/
-	
+ 		
  
  			if(idx<sum && idy<sum)
 			
@@ -38,15 +32,8 @@ __global__ void VecAdd(float* A, float* B, int* C,int N,int sum)
 			}}
  			
  						
-
-/*    if(idx==0 && idy==0)
-    {
-        for(int i=0;i<10000;i++)
-	{
-          n=D[i];
-		C[n]++; 
-	}
-    }*/
+ //__syncthreads();
+ 
  
 
 }
@@ -100,7 +87,7 @@ int NN=50;
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<N*N; i++)
-	{	angle= h_C[i]; result[angle]++; } 
+	{	result[0]= h_C[i]; //angle= h_C[i]; result[angle]++; } 
 
 		
 	
