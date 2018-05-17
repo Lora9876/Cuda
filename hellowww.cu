@@ -86,8 +86,11 @@ int NN=50;
 
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
-	for(int i=0; i<N*N; i++)
-	{	result[0]= h_C[i]; //angle= h_C[i]; result[angle]++; } 
+	result[0] = h_C[0] ; 
+	result[1]= h_C[1]; 
+	result[2]=h_C[3]; 
+/*	for(int i=0; i<N*N; i++)
+	{	result[0]= h_C[i]; //angle= h_C[i]; result[angle]++; } */
 
 		
 	
@@ -95,7 +98,7 @@ cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("%f\n", cpu_time_used); 
-		for(int i=0; i<720; i++)
+		for(int i=0; i<3; i++)
 			//if(result[i]>0)
 		printf("%d ", result[i]);   
 // Free device memory
