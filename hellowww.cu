@@ -24,10 +24,10 @@ __global__ void VecAdd(float* A, float* B, int* C,int N,int sum)
  
  			if(idx<sum && idy<sum)
 			
-			{	for(int i=0;i<sum*sum; i++)
+			{	for(int i=0;i<sum; i++)
 			{		m=A[sum*idx+i]*B[i*sum+idy];
 					n=int(m); 
-			 		C[idx*sum+i]=n;
+			 		C[idx*10000+ idy*sum+i]=n;
 					//mn[n]++;}}
 			}}
  			
