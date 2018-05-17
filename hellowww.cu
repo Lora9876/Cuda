@@ -28,8 +28,8 @@ __global__ void VecAdd(float* A, float* B, int* C,int N,int sum)
 					for(int j=0; j<sum; j++) 
 			{		m=A[sum*idx+i]*B[i*sum+j];
 					n=int(m); 
-					// C[1]++;
-			 		C[idx*10000+ idy*sum+i]=n;
+					// C[1]++;*/
+			 		C[idx*10000+ idy*sum+i]++;
 					//mn[n]++;}}
 			}}
  			
@@ -68,7 +68,7 @@ int* d_C; cudaMalloc(&d_C, arraybytes1);
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
-int NN=100; 
+int NN=128; 
 	
 	clock_t start, end;
 	 dim3 threadsPerBlock(NN, NN);
