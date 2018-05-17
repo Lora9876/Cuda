@@ -66,7 +66,7 @@ int* d_C; cudaMalloc(&d_C, N*arraybytes);
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
-int NN=50; 
+int NN=100; 
 	
 	clock_t start, end;
 	 dim3 threadsPerBlock(NN, NN);
