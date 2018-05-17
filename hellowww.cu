@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
  
 
 int N =10000;
+	int angle; 
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 = 720*16384 *sizeof(int);
 	size_t l=720*sizeof(int);
