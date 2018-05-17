@@ -20,6 +20,7 @@ __global__ void VecAdd(float* A, float* B, int* C, int* D,int N,int sum)
  		
 		int idx = blockDim.x * blockIdx.x + threadIdx.x;
 		int idy = blockIdx.y*blockDim.y+threadIdx.y;	
+ 		//int niz[10000]; 
 	/*	__shared__ int mn[720];
  			if(threadIdx.x==0)
 				for(int i=0; i<720; i++)
@@ -29,17 +30,16 @@ __global__ void VecAdd(float* A, float* B, int* C, int* D,int N,int sum)
  
  			if(idx<sum && idy<sum)
 			
-			{	for(int i=0;i<sum; i++)
+			{	for(int i=0;i<sum*sum; i++)
 			{		m=A[sum*idx+i]*B[i*sum+idy];
 					n=int(m); 
-			 		C[sum*idx+i]=n;
+			 		C[idx*sum+i]=n;
 					//mn[n]++;}}
 			}}
  			
- 							
-	/*__syncthreads();
+ 						
 
-    if(idx==0 && idy==0)
+/*    if(idx==0 && idy==0)
     {
         for(int i=0;i<10000;i++)
 	{
@@ -64,8 +64,8 @@ size_t arraybytes = N * sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
-int* h_C = (int*)malloc(arraybytes); 
-	int* h_D = (int*)malloc(arraybytes); 
+int* h_C = (int*)malloc(N*arraybytes); 
+	
 	int* result=(int*)malloc(l); 
 	
 	for(int i=0; i<10000; i++)
@@ -73,8 +73,8 @@ int* h_C = (int*)malloc(arraybytes);
 	h_A[0]=5; h_B[1] =3; 
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
-int* d_C; cudaMalloc(&d_C, arraybytes);
-	int* d_D; cudaMalloc(&d_D, arraybytes);
+int* d_C; cudaMalloc(&d_C, N*arraybytes);
+	
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
@@ -93,13 +93,13 @@ int NN=50;
      double cpu_time_used;
      
      start = clock();
-    cudaMemset(d_C,0,arraybytes);
-	 cudaMemset(d_D,0,arraybytes);
+    cudaMemset(d_C,0,100*arraybytes);
+	
  	VecAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C,d_D, N,NN);
 
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
-	for(int i=0; i<10000; i++)
+	for(int i=0; i<1000000; i++)
 	{	angle= h_C[i]; result[angle]++; } 
 
 		
@@ -125,59 +125,3 @@ cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 
 
 
-
-
-/*
-__global__ void angles(volatile float *a0, volatile float *b1, volatile float *histi)
-{
-  int idx = blockIdx.x * blockDim.x + threadIdx.x;
-  //int idy  = threadIdx.y + blockDim.y * blockIdx.y;
-  float m;
-  __shared__ unsigned int shared[20];
-    		// za prvu petlju ocistis uvek
-    			
-	
-   	
-
-  if(idx<20)
-	 
-	 histi[idx]=  5;
-             
-
-	
-}
-             
-             
-  int main()
-             {
-               
-               float *a, *b,*a0, *b0,*tmp, *tmp1;
-               a= (float*) malloc(20* sizeof(float));
-               b= (float*) malloc(20*sizeof(float));
-                 tmp= (float*) malloc(20*sizeof(float));
-	  a0= (float*) malloc(20* sizeof(float));
-               b0= (float*) malloc(20*sizeof(float));
-                 tmp1= (float*) malloc(20*sizeof(float));
-                
-               for(int i=0; i<20;i++)
-               { a[i]= i+1; b[i]=i+2; tmp[i]=0;}
-            
-               cudaMemcpy(a0, a, 20* sizeof(float), cudaMemcpyHostToDevice );
-               cudaMemcpy(b0, b,20* sizeof(float), cudaMemcpyHostToDevice );
-                dim3 grid, block;
-    
-               grid.x = 1024; 
-                	
-
-                          block.x = 1; 
-                angles<<<block, grid>>>(a0, b0, tmp1);
-           	   cudaMemcpy(tmp, tmp1, 20*sizeof(float), cudaMemcpyDeviceToHost);
-               
-               for(int i=0; i<20;i++)
-                 printf("%d ", tmp[i]); 
-           //    free(a0);
-	 // free(a); free(b); free(b0); free(tmp); free(tmp1); 
-             return EXIT_SUCCESS;
-             
-    }
-  */
