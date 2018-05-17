@@ -14,7 +14,7 @@
 
             
 
-__global__ void VecAdd(float* A, float* B, int* C, int* D,int N,int sum)
+__global__ void VecAdd(float* A, float* B, int* C,int N,int sum)
 {		float m;
  		int n; 
  		
@@ -95,7 +95,7 @@ int NN=50;
      start = clock();
     cudaMemset(d_C,0,100*arraybytes);
 	
- 	VecAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C,d_D, N,NN);
+ 	VecAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, N,NN);
 
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
