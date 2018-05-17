@@ -99,7 +99,7 @@ int NN=50;
 
 cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	
-	for(int i=0; i<1000000; i++)
+	for(int i=0; i<N*N; i++)
 	{	angle= h_C[i]; result[angle]++; } 
 
 		
