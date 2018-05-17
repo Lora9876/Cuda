@@ -82,7 +82,7 @@ int NN=100;
      double cpu_time_used;
      
      start = clock();
-    cudaMemset(d_C,0,100*arraybytes);
+    cudaMemset(d_C,0,arraybytes1);
 	
  	VecAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, N,NN);
 
