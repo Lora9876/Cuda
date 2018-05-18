@@ -34,17 +34,22 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
       
         for(int i=0; i<10000; i++)
         	{
-            ac= acosf((sin(b0[i]*fix1)*sin(b1[i]*fix1))+ cos(b0[i]*fix1)*cos(b1[i]*fix1)*cos((a1[idx]-a0[idx])*fix1));
+            ac= acosf((sin(b0[idx]*fix1)*sin(b1[i]*fix1))+ cos(b0[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[i]-a0[idx])*fix1));
 		ac= (ac*fix2/0.25); 
 		angle=(int) ac; 
              atomicAdd(&mn[angle],1);
                 }
 	for(int i=idx+1; i<10000; i++)
 	{
-	   /*  angle= (int)(a0[idx]*a0[i]); 
-             atomicAdd(&r[angle],1);
-	     angle= (int)(b0[idx]*b0[i]); 
-             atomicAdd(&s[angle],1);*/
+	    ac= acosf((sin(b0[idx]*fix1)*sin(b0[i]*fix1))+ cos(b0[idx]*fix1)*cos(b0[i]*fix1)*cos((a0[i]-a0[idx])*fix1));
+	    ac= (ac*fix2/0.25); 
+            angle=(int) ac; 
+            atomicAdd(&r[angle],1);
+            ac= acosf((sin(b1[idx]*fix1)*sin(b1[i]*fix1))+ cos(b1[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[idx]-a1[i])*fix1));
+            ac= (ac*fix2/0.25); 
+	    angle=(int) ac; 
+            atomicAdd(&s[angle],1);
+
 	
 	}
                
