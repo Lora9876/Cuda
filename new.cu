@@ -39,7 +39,7 @@ __global__ void angles(volatile float *a0, volatile float *b0,   volatile int *h
 
             }
         }
-    }
+    
 
     __syncthreads();
 
