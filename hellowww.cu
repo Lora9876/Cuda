@@ -14,7 +14,7 @@
 
             
 
-__global__ void VecAdd(float* A, float* B, int* C,int N,int sum)
+__global__ void VecAdd(volatile float* A, volatile float* B,volatile int* C,int N,int sum)
 {		float m;
  		int n; 
  		
