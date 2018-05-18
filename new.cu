@@ -13,7 +13,7 @@ using namespace std;
 
 __global__ void angles(volatile float *a0, volatile float *b0,   volatile int *hist)
 
-    
+{
     int idx = blockIdx.x * blockDim.x + threadIdx.x; // This should range to SUBMATRIX_SIZE
 
    
