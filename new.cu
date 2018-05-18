@@ -103,6 +103,7 @@ int* h_E = (int*)malloc(arraybytes1);
 	/*for(int i=0; i<10000; i++)
 	{ h_A1[i]=2700; h_A[i]=2700; h_B[i]=1800; h_B1[i]=3600;}
 	//h_A[0]=5.0; h_B[1] =3.0; */
+	/*
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
 float* d_A1; cudaMalloc(&d_A1, arraybytes);
@@ -126,8 +127,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
     cudaMemset(d_C,0,arraybytes1);
 	cudaMemset(d_D,0,arraybytes1);
 	cudaMemset(d_E,0,arraybytes1);
-	
- /*	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
+		angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
 
       cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
