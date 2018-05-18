@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 {
 	
 	float a1=2700; float a2= 2700; float a3=1800; float a4=3600; 
-	float m=sin(a1*1/60*PI*1/180); 
+	float m=sin(a1*0.00029074074); 
 	//m=m*180/PI; 
 	printf("%f", m);
 	
