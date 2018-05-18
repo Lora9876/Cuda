@@ -105,8 +105,8 @@ int NN=100;
 	result[0] = h_C[0] ; 
 	result[1]= h_C[1]; 
 	result[2]=h_C[3]; 
-/*	for(int i=0; i<N*N; i++)
-	{	result[0]= h_C[i]; //angle= h_C[i]; result[angle]++; } */
+	for(int i=0; i<720*20; i++)
+	{	result[0]+= h_C[i];} //angle= h_C[i]; result[angle]++; } */
 
 		
 	
