@@ -72,14 +72,15 @@ int main(int argc, char *argv[])
 {
 FILE *real_g; FILE *synthetic_g;
 int galaxies_r, galaxies_s; 
+
+	real_g = fopen("data_100k_arcmin.txt","r");
+    	synthetic_g = fopen("flat_100k_arcmin.txt","r");	
+	 fscanf(real_g, "%d", &galaxies_r);
+	 fscanf(synthetic_g,  "%d", &galaxies_s);
 	
-real_g = fopen("data_100k_arcmin.txt","r");
-synthetic_g = fopen("flat_100k_arcmin.txt","r");
-	fscanf(real_g, "%d", &galaxies_r);
-	fscanf(synthetic_g,  "%d", &galaxies_s);
 	
-	printf("%d %d" , real_g, synthetic_g); 
- 
+	
+	printf("%d %d",  galaxies_r, galaxies_s); 
 /*
 int N =10000;
 size_t arraybytes = N * sizeof(float);
