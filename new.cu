@@ -100,12 +100,9 @@ int* h_E = (int*)malloc(arraybytes1);
 	for(int i=0; i<galaxies_r; i++)
     {
        
-        fscanf(real_g, "%f %f", &h_A[i], &h_B[i]);
-       fscanf(synthetic_g, "%f %f", &h_A1[i], &h_B1[i]);
+        fscanf(real_g, "%e %e", &h_A[i], &h_B[i]);
+       fscanf(synthetic_g, "%e %e", &h_A1[i], &h_B1[i]);
     }		
-	/*for(int i=0; i<10000; i++)
-	{ h_A1[i]=2700; h_A[i]=2700; h_B[i]=1800; h_B1[i]=3600;}
-	//h_A[0]=5.0; h_B[1] =3.0; */
 	
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
