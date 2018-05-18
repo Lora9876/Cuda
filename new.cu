@@ -103,7 +103,7 @@ int* h_E = (int*)malloc(arraybytes1);
         fscanf(real_g, "%e %e", &h_A[i], &h_B[i]);
        fscanf(synthetic_g, "%e %e", &h_A1[i], &h_B1[i]);
     }		
-	
+/*	
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
 float* d_A1; cudaMalloc(&d_A1, arraybytes);
