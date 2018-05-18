@@ -38,7 +38,7 @@ __global__ void VecAdd(volatile float* A, volatile float* B,volatile int* C,int 
  
  */
 
-}
+
 // CPU Host code
 int main(int argc, char *argv[])
 {
