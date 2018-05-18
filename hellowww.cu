@@ -47,7 +47,10 @@ int main(int argc, char *argv[])
 	float m=acosf((sin(b0*fix)*sin(b1*fix))+ cos(b0*fix)*cos(b1*fix)*cos((a1-a0)*fix));
 	
 	m=m*180/PI; 
-	printf("%f", m);
+	int n;
+	n= (int) m;
+	
+	printf("%d", n);
 	
 	//angle = acosf((sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]*-a1[i]))*1/val);
 	
