@@ -78,7 +78,7 @@ synthetic_g = fopen("flat_100k_arcmin.txt","r");
 	fscanf(real_g, "%d", &galaxies_r);
 	fscanf(synthetic_g,  "%d", &galaxies_s);
  
-
+/*
 int N =10000;
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 = 20*720 *sizeof(int);
