@@ -42,10 +42,11 @@ __global__ void VecAdd(volatile float* A, volatile float* B,volatile int* C,int 
 // CPU Host code
 int main(int argc, char *argv[])
 {
+	float fix =0.00029074074; 
+	float a1=2700; float a2= 2700; float b0=1800; float b1=3600; 
+	float m=acosf((sin(b0*fix)*sin(b1*fix))+ cos(b0*fix)*cos(b1*fix)*cos((a1-a0)*fix)));
 	
-	float a1=2700; float a2= 2700; float a3=1800; float a4=3600; 
-	float m=sin(a1*0.00029074074); 
-	//m=m*180/PI; 
+	m=m*180/PI; 
 	printf("%f", m);
 	
 	//angle = acosf((sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]*-a1[i]))*1/val);
