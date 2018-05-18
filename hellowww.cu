@@ -11,7 +11,7 @@
 #define SUBMATRIX_SIZE 16384
 #include <time.h>
 
-
+#define PI 3.14159265
             
 
 __global__ void VecAdd(volatile float* A, volatile float* B,volatile int* C,int N,int sum)
@@ -43,7 +43,13 @@ __global__ void VecAdd(volatile float* A, volatile float* B,volatile int* C,int 
 int main(int argc, char *argv[])
 {
 	
- 
+	float a1=2700; float a2= 2700; float a3=1800; a4=3600; 
+	float m=sin(a1*1/60*PI*1/180); 
+	printf("%f" m);
+	
+	//angle = acosf((sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]*-a1[i]))*1/val);
+	
+ /*
 
 int N =10000;
 	int angle; 
@@ -78,7 +84,7 @@ int NN=100;
             threadsPerBlock.y = 512;
             blocksPerGrid.x = ceil(double(NN)/double(threadsPerBlock.x));
             blocksPerGrid.y = ceil(double(NN)/double(threadsPerBlock.y));
-        }*/
+        }
      double cpu_time_used;
      
      start = clock();
@@ -92,7 +98,7 @@ cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 	result[1]= h_C[1]; 
 	result[2]=h_C[3]; 
 /*	for(int i=0; i<N*N; i++)
-	{	result[0]= h_C[i]; //angle= h_C[i]; result[angle]++; } */
+	{	result[0]= h_C[i]; //angle= h_C[i]; result[angle]++; } 
 
 		
 	
@@ -107,7 +113,7 @@ cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);
 // Free host memory ...
-	
+	*/
 }
 
 
