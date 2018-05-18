@@ -13,7 +13,7 @@
 
 #define PI 3.14159265
             
-
+/*
 __global__ void VecAdd(volatile float* A, volatile float* B,volatile int* C,int N,int sum)
 {		float m;
  		int n; 
@@ -28,7 +28,7 @@ __global__ void VecAdd(volatile float* A, volatile float* B,volatile int* C,int 
 					for(int j=0; j<sum; j++) 
 			{		m=A[sum*idx+i]*B[i*sum+j];
 					n=int(m); 
-					// C[1]++;*/
+					// C[1]++;
 			 		C[idx*10000+ idy*sum+i]++;
 					//mn[n]++;}}
 			}}
@@ -36,7 +36,7 @@ __global__ void VecAdd(volatile float* A, volatile float* B,volatile int* C,int 
  						
 // __syncthreads();
  
- 
+ */
 
 }
 // CPU Host code
@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 	
 	float a1=2700; float a2= 2700; float a3=1800; float a4=3600; 
 	float m=sin(a1*1/60*PI*1/180); 
+	m=m*180/PI; 
 	printf("%f" m);
 	
 	//angle = acosf((sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]*-a1[i]))*1/val);
