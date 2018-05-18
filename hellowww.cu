@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
 	float m=acosf((sin(b0*fix)*sin(b1*fix))+ cos(b0*fix)*cos(b1*fix)*cos((a1-a0)*fix));
 	
 	m=m*180/PI; 
+	m=m/0.25;
 	int n;
 	n= (int) m;
 	
