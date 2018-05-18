@@ -11,18 +11,18 @@
 
 using namespace std;
 
-__global__ void angles(volatile float *a0, volatile float *b0,   volatile int *hist)
+__global__ void angles(volatile float *a0, volatile float *b0,   volatile int *hist, volatile int* hist_r)
 
 {
 	int angle;
     int idx = blockIdx.x * blockDim.x + threadIdx.x; // This should range to SUBMATRIX_SIZE
 
    
-    __shared__ int mn[720];
+    __shared__ int mn[720], r[720];
     if(threadIdx.x==0)
     {
         for (int i=0;i<720;i++)
-            mn[i] = 0;
+	{ mn[i] = 0; r[i]=0;} 
     }
     __syncthreads();
 
@@ -31,11 +31,16 @@ __global__ void angles(volatile float *a0, volatile float *b0,   volatile int *h
     {
       
         for(int i=0; i<10000; i++)
-        {
+        	{
             angle= (int)(a0[idx]*b0[i]); 
              atomicAdd(&mn[angle],1);
                 }
-
+	for(int i=idx+1; i<10000; i++)
+	{
+	     angle= (int)(a0[idx]*a0[i]); 
+             atomicAdd(&r[angle],1);
+	
+	}
                
 
             }
@@ -47,7 +52,7 @@ __global__ void angles(volatile float *a0, volatile float *b0,   volatile int *h
     if(threadIdx.x==0)
     {
         for(int i=0;i<720;i++)
-            hist[i+(blockIdx.x*720)]=mn[i];
+	{ hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; }
     }
 
 }
@@ -66,16 +71,16 @@ size_t arraybytes = N * sizeof(float);
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
 int* h_C = (int*)malloc(arraybytes1); 
-	
+int* h_D = (int*)malloc(arraybytes1); 	
 	int* result=(int*)malloc(l); 
-	
+	int* result_r=(int*)malloc(l); 
 	for(int i=0; i<10000; i++)
 	{ h_A[i]=1.0; h_B[i]=1.0;  }
 	h_A[0]=5.0; h_B[1] =3.0; 
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
 int* d_C; cudaMalloc(&d_C, arraybytes1);
-	
+	int* d_D; cudaMalloc(&d_D, arraybytes1);
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
@@ -84,26 +89,18 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 	clock_t start, end;
     int threadsPerBlock=736;
     int blocksPerGrid=15; 
-	/* dim3 threadsPerBlock(128, 128);
-    dim3 blocksPerGrid(1, 1);
-        /*if (NN*NN > 512){
-            threadsPerBlock.x = 512;
-            threadsPerBlock.y = 512;
-            blocksPerGrid.x = ceil(double(NN)/double(threadsPerBlock.x));
-            blocksPerGrid.y = ceil(double(NN)/double(threadsPerBlock.y));
-        }*/
      double cpu_time_used;
      
      start = clock();
     cudaMemset(d_C,0,arraybytes1);
 	
- 	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C);
+ 	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C,d_D);
 
     cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
-	
+	cudaMemcpy(h_D, d_D, arraybytes, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<720*20; i++)
-	{	result[i%720]+= h_C[i];} //angle= h_C[i]; result[angle]++; } */
+	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];} 
 
 		
 	
@@ -112,12 +109,14 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("%f\n", cpu_time_used); 
 		for(int i=0; i<720; i++)
-			//if(result[i]>0)
-		printf("%d ", result[i]);   
-// Free device memory
+		{printf("%d ", result[i]);   }
+	printf("\n druga\n " ) ; 
+	for(int i=0; i<720; i++)
+		{printf("%d ", result1[i]);   }
+
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
-	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);
-// Free host memory ...
+	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);cudaFree(d_D);cudaFree(h_D);
+
 	
 }
 
