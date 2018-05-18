@@ -70,7 +70,13 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
 int main(int argc, char *argv[])
 {
+FILE *real_g; FILE *synthetic_g;
+int galaxies_r, galaxies_s; 
 	
+real_g = fopen("data_100k_arcmin.txt","r");
+synthetic_g = fopen("flat_100k_arcmin.txt","r");
+	fscanf(real_g, "%d", &galaxies_r);
+	fscanf(synthetic_g,  "%d", &galaxies_s);
  
 
 int N =10000;
@@ -88,9 +94,15 @@ int* h_E = (int*)malloc(arraybytes1);
 	int* result=(int*)malloc(l); 
 	int* result_r=(int*)malloc(l); 
 	int* result_s=(int*)malloc(l); 
-	for(int i=0; i<10000; i++)
+	for(int i=0; i<galaxies_r; i++)
+    {
+       
+        fscanf(real_g, "%f %f", &h_A[i], &h_B[i]);
+       fscanf(synthetic_g, "%f %f", &h_A1[i], &h_B1[i]);
+    }		
+	/*for(int i=0; i<10000; i++)
 	{ h_A1[i]=2700; h_A[i]=2700; h_B[i]=1800; h_B1[i]=3600;}
-	//h_A[0]=5.0; h_B[1] =3.0; 
+	//h_A[0]=5.0; h_B[1] =3.0; */
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
 float* d_A1; cudaMalloc(&d_A1, arraybytes);
