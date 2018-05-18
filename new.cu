@@ -11,10 +11,11 @@
 
 using namespace std;
 
-__global__ void angles(volatile float *a0, volatile float *b0,   volatile int *hist, volatile int* hist_r, volatile int* hist_s)
+__global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1,   volatile int *hist, volatile int* hist_r, volatile int* hist_s)
 
 {
-	int angle;
+	float ac;//721? koliko puta ucitavas i gde da mnozis...zasto float
+    int angle; float fix1=0.00029074074; float fix2=57.2957795131;
     int idx = blockIdx.x * blockDim.x + threadIdx.x; 
 
    
@@ -32,7 +33,8 @@ __global__ void angles(volatile float *a0, volatile float *b0,   volatile int *h
       
         for(int i=0; i<10000; i++)
         	{
-            angle= (int)(a0[idx]*b0[i]); 
+            ac= acosf((sin(b0[i]*fix1)*sin(b1[i]*fix1))+ cos(b0[i]*fix1)*cos(b1[i]*fix1)*cos((a1[idx]-a0[idx])*fix1));
+		angle=(int) (ac*fix2/0.25); 
              atomicAdd(&mn[angle],1);
                 }
 	for(int i=idx+1; i<10000; i++)
