@@ -77,6 +77,8 @@ real_g = fopen("data_100k_arcmin.txt","r");
 synthetic_g = fopen("flat_100k_arcmin.txt","r");
 	fscanf(real_g, "%d", &galaxies_r);
 	fscanf(synthetic_g,  "%d", &galaxies_s);
+	
+	printf("%d %d" , real_g, synthetic_g); 
  
 /*
 int N =10000;
