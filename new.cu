@@ -83,7 +83,7 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 	
 	clock_t start, end;
     int threadsPerBlock=736;
-    int blocksPerGrid=14; 
+    int blocksPerGrid=15; 
 	/* dim3 threadsPerBlock(128, 128);
     dim3 blocksPerGrid(1, 1);
         /*if (NN*NN > 512){
