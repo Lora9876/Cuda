@@ -82,7 +82,7 @@ int galaxies_r, galaxies_s;
 	
 	printf("%d %d",  galaxies_r, galaxies_s); 
 
-/*int N =10000;
+int N =10000;
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 = 20*720 *sizeof(int);
 	size_t l=720*sizeof(int);
@@ -101,8 +101,9 @@ int* h_E = (int*)malloc(arraybytes1);
     {
        
         fscanf(real_g, "%e %e", &h_A[i], &h_B[i]);
-       fscanf(synthetic_g, "%e %e", &h_A1[i], &h_B1[i]);
-    }		*/
+       fscanf(synthetic_g, "%e %e", &h_A1[i], &h_B1[i]);}
+    fclose(real_g);
+	 fclose(synthetic_g);	
 /*	
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
