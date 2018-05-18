@@ -11,7 +11,7 @@
 
 using namespace std;
 
-__global__ void angles(volatile float *a0, volatile float *b0,   volatile int *hist, volatile int* hist_r)
+__global__ void angles(volatile float *a0, volatile float *b0,   volatile int *hist, volatile int* hist_r, volatile int* hist_s)
 
 {
 	int angle;
@@ -54,7 +54,7 @@ __global__ void angles(volatile float *a0, volatile float *b0,   volatile int *h
     if(threadIdx.x==0)
     {
         for(int i=0;i<720;i++)
-	{ hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; }
+	{ hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; hist_s[i+(blockIdx.x*720)]=s[i];}
     }
 
 }
@@ -99,7 +99,7 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
      start = clock();
     cudaMemset(d_C,0,arraybytes1);
 	
- 	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C,d_D);
+ 	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C,d_D,d_E);
 
         cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
