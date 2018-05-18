@@ -18,11 +18,11 @@ __global__ void angles(volatile float *a0, volatile float *b0,   volatile int *h
     int idx = blockIdx.x * blockDim.x + threadIdx.x; // This should range to SUBMATRIX_SIZE
 
    
-    __shared__ int mn[720], r[720];
+    __shared__ int mn[720], r[720], s[720];
     if(threadIdx.x==0)
     {
         for (int i=0;i<720;i++)
-	{ mn[i] = 0; r[i]=0;} 
+	{ mn[i] = 0; r[i]=0;s[i]=0;} 
     }
     __syncthreads();
 
@@ -39,6 +39,8 @@ __global__ void angles(volatile float *a0, volatile float *b0,   volatile int *h
 	{
 	     angle= (int)(a0[idx]*a0[i]); 
              atomicAdd(&r[angle],1);
+	     angle= (int)(b0[idx]*b0[i]); 
+             atomicAdd(&s[angle],1);
 	
 	}
                
