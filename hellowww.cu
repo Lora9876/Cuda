@@ -43,7 +43,7 @@ __global__ void VecAdd(volatile float* A, volatile float* B,volatile int* C,int 
 int main(int argc, char *argv[])
 {
 	
-	float a1=2700; float a2= 2700; float a3=1800; a4=3600; 
+	float a1=2700; float a2= 2700; float a3=1800; float a4=3600; 
 	float m=sin(a1*1/60*PI*1/180); 
 	printf("%f" m);
 	
