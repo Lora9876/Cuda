@@ -72,8 +72,10 @@ float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
 int* h_C = (int*)malloc(arraybytes1); 
 int* h_D = (int*)malloc(arraybytes1); 	
+int* h_E = (int*)malloc(arraybytes1); 	
 	int* result=(int*)malloc(l); 
 	int* result_r=(int*)malloc(l); 
+	int* result_s=(int*)malloc(l); 
 	for(int i=0; i<10000; i++)
 	{ h_A[i]=1.0; h_B[i]=1.0;  }
 	h_A[0]=5.0; h_B[1] =3.0; 
@@ -81,6 +83,7 @@ float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
 int* d_C; cudaMalloc(&d_C, arraybytes1);
 	int* d_D; cudaMalloc(&d_D, arraybytes1);
+	int* d_E; cudaMalloc(&d_E, arraybytes1);
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
@@ -96,11 +99,12 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 	
  	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C,d_D);
 
-    cudaMemcpy(h_C, d_C, arraybytes, cudaMemcpyDeviceToHost);
-	cudaMemcpy(h_D, d_D, arraybytes, cudaMemcpyDeviceToHost);
+        cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<720*20; i++)
-	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];} 
+	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
 
 		
 	
@@ -113,9 +117,12 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 	printf("\n druga\n " ) ; 
 	for(int i=0; i<720; i++)
 		{printf("%d ", result_r[i]);   }
+	printf("\n treca\n " ) ; 
+	for(int i=0; i<720; i++)
+		{printf("%d ", result_s[i]);   }
 
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
-	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);cudaFree(d_D);cudaFree(h_D);
+	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);cudaFree(d_D);cudaFree(h_D);cudaFree(d_E);cudaFree(h_E);
 
 	
 }
