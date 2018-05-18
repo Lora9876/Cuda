@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 	
 	float a1=2700; float a2= 2700; float a3=1800; float a4=3600; 
 	float m=sin(a1*1/60*PI*1/180); 
-	m=m*180/PI; 
+	//m=m*180/PI; 
 	printf("%f" m);
 	
 	//angle = acosf((sin(b0[idx]) *sin(b1[i]) + cos(b0[idx]) * cos(b1[i]) * cos(a0[idx]*-a1[i]))*1/val);
