@@ -84,7 +84,7 @@ int NN=100;
 	
 	clock_t start, end;
     int threadsPerBlock=512;
-    int blocksPerGrid=20; 
+    int blocksPerGrid=30; 
 	/* dim3 threadsPerBlock(128, 128);
     dim3 blocksPerGrid(1, 1);
         /*if (NN*NN > 512){
