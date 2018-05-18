@@ -14,10 +14,11 @@ using namespace std;
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
 
 {
-	float ac;//721? koliko puta ucitavas i gde da mnozis...zasto float
-    int angle; float fix1=0.00029074074; float fix2=57.2957795131;
-    int idx = blockIdx.x * blockDim.x + threadIdx.x; 
+	int idx = blockIdx.x * blockDim.x + threadIdx.x; 
 
+	float ac;//721? koliko puta ucitavas i gde da mnozis...zasto float
+    int angle; float fix1=3,14/(60*180); float fix2=57;
+    
    
     __shared__ int mn[720], r[720], s[720];
     if(threadIdx.x==0)
