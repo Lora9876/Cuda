@@ -127,7 +127,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	cudaMemset(d_D,0,arraybytes1);
 	cudaMemset(d_E,0,arraybytes1);
 	
- 	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
+ /*	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
 
       cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
@@ -154,7 +154,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);cudaFree(d_D);cudaFree(h_D);cudaFree(d_E);cudaFree(h_E);
 	cudaFree(d_A1);cudaFree(h_A1);cudaFree(d_B1);cudaFree(h_B1);
-
+*/
 	
 }
 
