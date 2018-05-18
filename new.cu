@@ -82,7 +82,7 @@ int* h_E = (int*)malloc(arraybytes1);
 	int* result_r=(int*)malloc(l); 
 	int* result_s=(int*)malloc(l); 
 	for(int i=0; i<10000; i++)
-	{ h_A1[i]=h_A[i]=2700; h_B[i]=1800; h_B1[i]=3600;}
+	{ h_A1[i]=2700; h_A[i]=2700; h_B[i]=1800; h_B1[i]=3600;}
 	//h_A[0]=5.0; h_B[1] =3.0; 
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
@@ -134,6 +134,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);cudaFree(d_D);cudaFree(h_D);cudaFree(d_E);cudaFree(h_E);
+	cudaFree(d_A1);cudaFree(h_A1);cudaFree(d_B1);cudaFree(h_B1);
 
 	
 }
