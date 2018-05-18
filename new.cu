@@ -73,6 +73,8 @@ size_t arraybytes = N * sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
+float* h_A1 = (float*)malloc(arraybytes);
+float* h_B1 = (float*)malloc(arraybytes);
 int* h_C = (int*)malloc(arraybytes1); 
 int* h_D = (int*)malloc(arraybytes1); 	
 int* h_E = (int*)malloc(arraybytes1); 	
@@ -80,16 +82,20 @@ int* h_E = (int*)malloc(arraybytes1);
 	int* result_r=(int*)malloc(l); 
 	int* result_s=(int*)malloc(l); 
 	for(int i=0; i<10000; i++)
-	{ h_A[i]=1.0; h_B[i]=1.0;  }
-	h_A[0]=5.0; h_B[1] =3.0; 
+	{ h_A1[i]=h_A[i]=2700; h_B[i]=1800; h_B1[i]=3600;}
+	//h_A[0]=5.0; h_B[1] =3.0; 
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
+float* d_A1; cudaMalloc(&d_A1, arraybytes);
+float* d_B1; cudaMalloc(&d_B1, arraybytes);
 int* d_C; cudaMalloc(&d_C, arraybytes1);
 	int* d_D; cudaMalloc(&d_D, arraybytes1);
 	int* d_E; cudaMalloc(&d_E, arraybytes1);
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
+cudaMemcpy(d_A1, h_A1, arraybytes, cudaMemcpyHostToDevice);
+cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 	
 	clock_t start, end;
@@ -102,7 +108,7 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 	cudaMemset(d_D,0,arraybytes1);
 	cudaMemset(d_E,0,arraybytes1);
 	
- 	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C,d_D,d_E);
+ 	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
 
       cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
