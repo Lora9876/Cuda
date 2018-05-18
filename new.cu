@@ -41,10 +41,10 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
                 }
 	for(int i=idx+1; i<10000; i++)
 	{
-	     angle= (int)(a0[idx]*a0[i]); 
+	   /*  angle= (int)(a0[idx]*a0[i]); 
              atomicAdd(&r[angle],1);
 	     angle= (int)(b0[idx]*b0[i]); 
-             atomicAdd(&s[angle],1);
+             atomicAdd(&s[angle],1);*/
 	
 	}
                
