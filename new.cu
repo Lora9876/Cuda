@@ -15,7 +15,7 @@ __global__ void angles(volatile float *a0, volatile float *b0,   volatile int *h
 
 {
 	int angle;
-    int idx = blockIdx.x * blockDim.x + threadIdx.x; // This should range to SUBMATRIX_SIZE
+    int idx = blockIdx.x * blockDim.x + threadIdx.x; 
 
    
     __shared__ int mn[720], r[720], s[720];
@@ -98,12 +98,14 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
      
      start = clock();
     cudaMemset(d_C,0,arraybytes1);
+	cudaMemset(d_D,0,arraybytes1);
+	cudaMemset(d_E,0,arraybytes1);
 	
  	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C,d_D,d_E);
 
-        cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
+      /*  cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
-	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);*/
 	
 	for(int i=0; i<720*20; i++)
 	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
