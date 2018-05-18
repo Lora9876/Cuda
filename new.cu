@@ -112,7 +112,7 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 		{printf("%d ", result[i]);   }
 	printf("\n druga\n " ) ; 
 	for(int i=0; i<720; i++)
-		{printf("%d ", result1[i]);   }
+		{printf("%d ", result_r[i]);   }
 
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);cudaFree(d_D);cudaFree(h_D);
