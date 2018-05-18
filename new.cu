@@ -103,9 +103,9 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 	
  	angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C,d_D,d_E);
 
-      /*  cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
+      /cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
-	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);*/
+	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<720*20; i++)
 	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
