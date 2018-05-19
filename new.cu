@@ -72,15 +72,13 @@ int main(int argc, char *argv[])
 {
 FILE *real_g; FILE *synthetic_g;
 int galaxies_r, galaxies_s; 
-
+clock_t start, end;
+start = clock();
 	real_g = fopen("data_100k_arcmin.txt","r");
     	synthetic_g = fopen("flat_100k_arcmin.txt","r");	
-	 fscanf(real_g, "%d", &galaxies_r);
-	 fscanf(synthetic_g,  "%d", &galaxies_s);
+	fscanf(real_g, "%d", &galaxies_r);
+	fscanf(synthetic_g,  "%d", &galaxies_s);
 	
-	
-	
-	printf("%d %d",  galaxies_r, galaxies_s); 
 
 int N =100000;
 size_t arraybytes = N * sizeof(float);
@@ -119,12 +117,12 @@ cudaMemcpy(d_A1, h_A1, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 	
-	clock_t start, end;
+	
     int threadsPerBlock=736;
     int blocksPerGrid=140; 
      double cpu_time_used;
      
-     start = clock();
+    
     cudaMemset(d_C,0,arraybytes1);
 	cudaMemset(d_D,0,arraybytes1);
 	cudaMemset(d_E,0,arraybytes1);
@@ -138,19 +136,20 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
 
 		
-	
+	for(int i=0;i<720;i++)
+		result[i]=(result_r[i]-2*result[i]+result_s[i])/result_s[i]; 
 	
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("%f\n", cpu_time_used); 
 		for(int i=0; i<720; i++)
 		{printf("%d ", result[i]);   }
-	printf("\n druga\n " ) ; 
+	/*printf("\n druga\n " ) ; 
 	for(int i=0; i<720; i++)
 		{printf("%d ", result_r[i]);   }
 	printf("\n treca\n " ) ; 
 	for(int i=0; i<720; i++)
-		{printf("%d ", result_s[i]);   }
+		{printf("%d ", result_s[i]);   }*/
 
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);cudaFree(d_D);cudaFree(h_D);cudaFree(d_E);cudaFree(h_E);
