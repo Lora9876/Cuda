@@ -82,7 +82,7 @@ int galaxies_r, galaxies_s;
 	
 	printf("%d %d",  galaxies_r, galaxies_s); 
 
-int N =10000;
+int N =100000;
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 = 20*720 *sizeof(int);
 	size_t l=720*sizeof(int);
@@ -121,7 +121,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	
 	clock_t start, end;
     int threadsPerBlock=736;
-    int blocksPerGrid=15; 
+    int blocksPerGrid=140; 
      double cpu_time_used;
      
      start = clock();
