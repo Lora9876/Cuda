@@ -138,7 +138,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 
 		
 	for(int i=0;i<720;i++)
-		final[i]=(result_r[i]-2*result[i]+result_s[i])/result_s[i]; 
+		final[i]=(float) (result_r[i]-2*result[i]+result_s[i])/result_s[i]; 
 	
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
