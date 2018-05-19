@@ -32,14 +32,14 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     if (idx<10000)
     {
       
-        for(int i=0; i<10000; i++)
+        for(int i=0; i<100000; i++)
         	{
             ac= acosf((sin(b0[idx]*fix1)*sin(b1[i]*fix1))+ cos(b0[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[i]-a0[idx])*fix1));
 		ac= (ac*fix2/0.25); 
 		angle=(int) ac; 
              atomicAdd(&mn[angle],1);
                 }
-	for(int i=idx+1; i<10000; i++)
+	for(int i=idx+1; i<100000; i++)
 	{
 	    ac= acosf((sin(b0[idx]*fix1)*sin(b0[i]*fix1))+ cos(b0[idx]*fix1)*cos(b0[i]*fix1)*cos((a0[i]-a0[idx])*fix1));
 	    ac= (ac*fix2/0.25); 
@@ -104,7 +104,7 @@ int* h_E = (int*)malloc(arraybytes1);
        fscanf(synthetic_g, "%e %e", &h_A1[i], &h_B1[i]);}
     fclose(real_g);
 	 fclose(synthetic_g);	
-/*	
+	
 float* d_A; cudaMalloc(&d_A, arraybytes);
 float* d_B; cudaMalloc(&d_B, arraybytes);
 float* d_A1; cudaMalloc(&d_A1, arraybytes);
@@ -156,7 +156,7 @@ cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);cudaFree(d_D);cudaFree(h_D);cudaFree(d_E);cudaFree(h_E);
 	cudaFree(d_A1);cudaFree(h_A1);cudaFree(d_B1);cudaFree(h_B1);
 
-	*/
+	
 }
 
 
