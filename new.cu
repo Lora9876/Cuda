@@ -84,6 +84,7 @@ int N =100000;
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 = 20*720 *sizeof(int);
 	size_t l=720*sizeof(int);
+	size_t l1=720*sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
@@ -95,7 +96,7 @@ int* h_E = (int*)malloc(arraybytes1);
 	int* result=(int*)malloc(l); 
 	int* result_r=(int*)malloc(l); 
 	int* result_s=(int*)malloc(l); 
-	float* final=(float*)malloc(l); 
+	float* final=(float*)malloc(l1); 
 	for(int i=0; i<galaxies_r; i++)
     {
        
