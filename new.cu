@@ -95,6 +95,7 @@ int* h_E = (int*)malloc(arraybytes1);
 	int* result=(int*)malloc(l); 
 	int* result_r=(int*)malloc(l); 
 	int* result_s=(int*)malloc(l); 
+	float* final=(float*)malloc(l); 
 	for(int i=0; i<galaxies_r; i++)
     {
        
@@ -137,13 +138,13 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 
 		
 	for(int i=0;i<720;i++)
-		result[i]=(result_r[i]-2*result[i]+result_s[i])/result_s[i]; 
+		final[i]=(result_r[i]-2*result[i]+result_s[i])/result_s[i]; 
 	
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("%f\n", cpu_time_used); 
 		for(int i=0; i<720; i++)
-		{printf("%d ", result[i]);   }
+		{printf("%f ", final[i]);   }
 	/*printf("\n druga\n " ) ; 
 	for(int i=0; i<720; i++)
 		{printf("%d ", result_r[i]);   }
