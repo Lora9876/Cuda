@@ -33,7 +33,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     __syncthreads();
 
 
-    if (idx<100000)
+    if (idx<10000)
     {
       
         for(int i=0; i<100000; i++)
