@@ -14,18 +14,18 @@ using namespace std;
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
 
 {
-	int idx = blockIdx.x * blockDim.x + threadIdx.x; 
-	//int idy =  threadIdx.y; 
+	int idxx = blockIdx.x * blockDim.x + threadIdx.x; 
+	int idy =  threadIdx.y; 
 	
-	////int idx;
-	//idx=idxx*1024 +idy; 
+	int idx;
+	idx=idxx*1024 +idy; 
 
 	float ac;//721? koliko puta ucitavas i gde  da mnozis...zasto float proveri koliko imas preracunavanja
     int angle; float fix1=3.14/(60*180); float fix2=57;
     
    
     __shared__ int mn[720], r[720], s[720];
-    if(threadIdx.x==0)
+    if(threadIdx.x==0 && threadIdx.y==0)
     {
         for (int i=0;i<720;i++)
 	{ mn[i] = 0; r[i]=0;s[i]=0;} 
@@ -69,7 +69,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
     __syncthreads();
 
-      if(threadIdx.x==0)
+      if(threadIdx.x==0 && threadIdx.y==0)
     {
         for(int i=0;i<720;i++)
 	{ hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; hist_s[i+(blockIdx.x*720)]=s[i];}
@@ -128,8 +128,8 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_A1, h_A1, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
-	
-    int threadsPerBlock=736 ;
+	dim3 threadsPerBlock(1024,1024); 
+    //int threadsPerBlock=736 ;
     int blocksPerGrid=136; 
      double cpu_time_used;
      
