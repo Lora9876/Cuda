@@ -92,7 +92,7 @@ start = clock();
 int N =100000;
 	
 size_t arraybytes = N * sizeof(float);
-	size_t arraybytes1 =2000 *720 *sizeof(int);
+	size_t arraybytes1 =200 *720 *sizeof(int);
 	size_t l=720*sizeof(int);
 	size_t l1=720*sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
@@ -130,7 +130,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 	
     int threadsPerBlock=736 ;
-    int blocksPerGrid=2000; 
+    int blocksPerGrid=200; 
      double cpu_time_used;
      
     
@@ -143,7 +143,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);
 	
-	for(int i=0; i<720*2000; i++)
+	for(int i=0; i<720*200; i++)
 	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
 
 		
