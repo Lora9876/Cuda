@@ -29,7 +29,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     __syncthreads();
 
 
-    if (idx<100000 && threadIdx.x<721)
+    if (idx<100000)
     {
       
         for(int i=0; i<100000; i++)
@@ -44,6 +44,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	    ac= (ac*fix2/0.25); 
             angle=(int) ac; 
             atomicAdd(&r[angle],1);
+	     
             ac= acosf((sin(b1[idx]*fix1)*sin(b1[i]*fix1))+ cos(b1[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[idx]-a1[i])*fix1));
             ac= (ac*fix2/0.25); 
 	    angle=(int) ac; 
@@ -121,7 +122,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 	
     int threadsPerBlock=736;
-    int blocksPerGrid=136; 
+    int blocksPerGrid=500; 
      double cpu_time_used;
      
     
@@ -143,6 +144,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+	
 	int brk=0; 
 	printf("%f\n", cpu_time_used); 
 		for(int i=0; i<720; i++)
