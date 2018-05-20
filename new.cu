@@ -14,11 +14,11 @@ using namespace std;
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
 
 {
-	int idxx = blockIdx.x * blockDim.x + threadIdx.x; 
-	int idy =  threadIdx.y; 
+	int idx = blockIdx.x * blockDim.x + threadIdx.x; 
+	//int idy =  threadIdx.y; 
 	
-	int idx;
-	idx=idxx*1024 +idy; 
+	////int idx;
+	//idx=idxx*1024 +idy; 
 
 	float ac;//721? koliko puta ucitavas i gde  da mnozis...zasto float proveri koliko imas preracunavanja
     int angle; float fix1=3.14/(60*180); float fix2=57;
