@@ -2,6 +2,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include<math.h>
+#include "vector_types.h"
 #include<unistd.h>
 #include <time.h>
 #include "device_functions.h"
