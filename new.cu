@@ -32,7 +32,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     }
     __syncthreads();
 
-mn[idx]=idx; 
+	atomicAdd(&mn[idx],idx); 
  /*   if (idx>0 && idx<100000)
     {
       
