@@ -15,17 +15,17 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
 {
 	int idxx = blockIdx.x * blockDim.x + threadIdx.x; 
-	int idy = blockIdx.y * blockDim.y+ threadIdx.y; 
+	int idy =  threadIdx.y; 
 	
 	int idx;
 	idx=idxx*1024 +idy; 
 
-	float ac;//721? koliko puta ucitavas i gde da mnozis...zasto float proveri koliko imas preracunavanja
+	float ac;//721? koliko puta ucitavas i gde  da mnozis...zasto float proveri koliko imas preracunavanja
     int angle; float fix1=3.14/(60*180); float fix2=57;
     
    
     __shared__ int mn[720], r[720], s[720];
-    if(threadIdx.x==0)
+    if(threadIdx.x==0 && threadIdx.y==0)
     {
         for (int i=0;i<720;i++)
 	{ mn[i] = 0; r[i]=0;s[i]=0;} 
