@@ -25,7 +25,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     
    
     __shared__ int mn[720], r[720], s[720];
-    if(threadIdx.x==0 && threadIdx.y==0)
+    if((threadIdx.x==0) && (threadIdx.y==0))
     {
         for (int i=0;i<720;i++)
 	{ mn[i] = 0; r[i]=0;s[i]=0;} 
@@ -66,7 +66,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
     __syncthreads();
 
-    if(threadIdx.x==0 && threadIdx.y==0)
+      if((threadIdx.x==0) && (threadIdx.y==0))
     {
         for(int i=0;i<720;i++)
 	{ hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; hist_s[i+(blockIdx.x*720)]=s[i];}
@@ -88,7 +88,7 @@ start = clock();
 
 int N =100000;
 size_t arraybytes = N * sizeof(float);
-	size_t arraybytes1 = 20*720 *sizeof(int);
+	size_t arraybytes1 =20 *720 *sizeof(int);
 	size_t l=720*sizeof(int);
 	size_t l1=720*sizeof(float);
 // Allocate input vectors h_A and h_B in host memory
@@ -126,7 +126,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 	
     dim3 threadsPerBlock(1024,1024) ;
-    int blocksPerGrid=10; 
+    int blocksPerGrid=20; 
      double cpu_time_used;
      
     
