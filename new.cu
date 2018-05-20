@@ -142,9 +142,18 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+	int brk; 
 	printf("%f\n", cpu_time_used); 
 		for(int i=0; i<720; i++)
-		{printf("%f ", final[i]);   }
+			brk+=result[i]; 
+	printf("%d\n ", brk);
+	for(int i=0; i<720; i++)
+			brk+=result_s[i]; 
+	printf("%d\n ", brk);
+	for(int i=0; i<720; i++)
+			brk+=result_r[i]; 
+	printf("%d\n ", brk);
+		//{printf("%f ", final[i]);   }
 	/*printf("\n druga\n " ) ; 
 	for(int i=0; i<720; i++)
 		{printf("%d ", result_r[i]);   }
