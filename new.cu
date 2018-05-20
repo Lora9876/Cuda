@@ -33,12 +33,12 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     __syncthreads();
 
 
-   if (idx>0 && idx<100000)
+   if ( idx<100000)
     {
       
         for(int i=0; i<100000; i++)
         	{
-		   atomicAdd(&mn[0],1);
+		   
             ac= acosf((sin(b0[idx]*fix1)*sin(b1[i]*fix1))+ cos(b0[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[i]-a0[idx])*fix1));
 		ac= (ac*fix2/0.25); 
 	
