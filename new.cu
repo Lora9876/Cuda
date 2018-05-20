@@ -92,7 +92,7 @@ start = clock();
 	
 
 int N =100000;
-	int xx=20; 
+	int xx=200; 
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 =xx *720 *sizeof(int);
 	size_t l=720*sizeof(int);
@@ -130,8 +130,8 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_A1, h_A1, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
-	dim3 threadsPerBlock(1024,1024); 
-    //int threadsPerBlock=736 ;
+	dim3 threadsPerBlock(736); 
+    //int threadsPerBloc736k=736 ;
     dim3 blocksPerGrid(xx); 
      double cpu_time_used;
      
