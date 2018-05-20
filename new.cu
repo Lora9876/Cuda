@@ -14,11 +14,11 @@ using namespace std;
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
 
 {
-	int idx = blockIdx.x * blockDim.x + threadIdx.x; 
-	//int idy =  threadIdx.y; 
+	int idxx = blockIdx.x * blockDim.x + threadIdx.x; 
+	int idy =  threadIdx.y; 
 	
-	//int idx;
-	//idx=idxx*1024 +idy; 
+	int idx;
+	idx=idxx*1024 +idy; 
 
 	float ac;//721? koliko puta ucitavas i gde  da mnozis...zasto float proveri koliko imas preracunavanja
     int angle; float fix1=3.14/(60*180); float fix2=57;
@@ -32,8 +32,8 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     }
     __syncthreads();
 
-	atomicAdd(&mn[0],idx); 
- /*   if (idx>0 && idx<100000)
+
+   if (idx>0 && idx<100000)
     {
       
         for(int i=0; i<100000; i++)
@@ -43,9 +43,9 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		ac= (ac*fix2/0.25); 
 	
 		angle=(int) ac; 
-		if(angle>719 || angle<0) angle=0; 
-          
-		}*/
+		  atomicAdd(&mn[angle],1);
+	}
+		
 	  /*  for(int i=idx+1; i<100000;i++)
 	    {  ac= acosf((sin(b0[idx]*fix1)*sin(b0[i]*fix1))+ cos(b0[idx]*fix1)*cos(b0[i]*fix1)*cos((a0[i]-a0[idx])*fix1));
 	    ac= (ac*fix2/0.25); 
@@ -90,6 +90,7 @@ start = clock();
 	
 
 int N =100000;
+	
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 =2000 *720 *sizeof(int);
 	size_t l=720*sizeof(int);
@@ -152,20 +153,20 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	
-	int brk=0; 
+	double brk=0; 
 	printf("%f\n", cpu_time_used); 
 		for(int i=0; i<720; i++)
-			brk+=result[i]; 
-	printf("%d\n ", brk);
+			brk+=(double) result[i]; 
+	printf("%f\n ", brk);
 	brk=0;
-	for(int i=0; i<720; i++)
+	/*for(int i=0; i<720; i++)
 			brk+=result_s[i]; 
 	printf("%d\n ", brk);
 	brk=0;
 	for(int i=0; i<720; i++)
 			brk+=result_r[i]; 
 	printf("%d\n ", brk);
-	brk=0;
+	brk=0;*/
 		//{printf("%f ", final[i]);   }
 	/*printf("\n druga\n " ) ; 
 	for(int i=0; i<720; i++)
