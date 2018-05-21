@@ -92,7 +92,7 @@ start = clock();
 	
 
 int N =100000;
-	int xx=200; 
+	int xx=10; 
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 =xx *720 *sizeof(int);
 	size_t l=720*sizeof(int);
