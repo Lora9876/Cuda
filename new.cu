@@ -11,6 +11,7 @@
 #include<cuda_runtime.h>
 #include <time.h>
 
+
 using namespace std;
 
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
@@ -158,6 +159,13 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	
 	double brk=0; 
 	printf("%f\n", cpu_time_used); 
+	FILE *gnuplot = popen("gnuplot", "w");
+	fprintf(gnuplot, "plot '-'\n");
+		for (i = 0; i < count; i++)
+    		fprintf(gnuplot, "%g %g\n", result_s[i], result_r[i]);
+			fprintf(gnuplot, "e\n");
+			fflush(gnuplot);
+	
 		for(int i=0; i<720; i++)
 			brk+=(double) result[i]; 
 	printf("%f\n ", brk);
