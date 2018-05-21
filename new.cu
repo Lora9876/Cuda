@@ -40,7 +40,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
    if ( idx<100000)
     {
       
-        for(int i=0; i<100000; i++)
+        for(int i=0; i<50000; i++)
         	{
 		   
             ac= acosf((sin(b0[idx]*fix1)*sin(b1[i]*fix1))+ cos(b0[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[i]-a0[idx])*fix1));
@@ -48,7 +48,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	
 		angle=(int) ac; 
 		  atomicAdd(&mn[angle],1);
-	}
+		}
 		
 	   for(int i=idx+1; i<100000;i++)
 	    {  ac= acosf((sin(b0[idx]*fix1)*sin(b0[i]*fix1))+ cos(b0[idx]*fix1)*cos(b0[i]*fix1)*cos((a0[i]-a0[idx])*fix1));
@@ -61,13 +61,46 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	    angle=(int) ac; 
             atomicAdd(&s[angle],1);
 
-	
-	    
-               
-
                 }
 	
            }
+	else if(idx<200000)
+	{
+	idx-=100000; 
+	for(int i=50000; i<100000; i++)
+        	{
+		   
+            ac= acosf((sin(b0[idx]*fix1)*sin(b1[i]*fix1))+ cos(b0[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[i]-a0[idx])*fix1));
+		ac= (ac*fix2/0.25); 
+	
+		angle=(int) ac; 
+		  atomicAdd(&mn[angle],1);
+		}
+		
+	   for(int i=idx+1; i<100000;i++)
+	    {  ac= acosf((sin(b0[idx]*fix1)*sin(b0[i]*fix1))+ cos(b0[idx]*fix1)*cos(b0[i]*fix1)*cos((a0[i]-a0[idx])*fix1));
+	    ac= (ac*fix2/0.25); 
+            angle=(int) ac; 
+            atomicAdd(&r[angle],1);
+	     
+            ac= acosf((sin(b1[idx]*fix1)*sin(b1[i]*fix1))+ cos(b1[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[idx]-a1[i])*fix1));
+            ac= (ac*fix2/0.25); 
+	    angle=(int) ac; 
+            atomicAdd(&s[angle],1);
+
+                }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	}
         
     
 
@@ -94,7 +127,7 @@ start = clock();
 	
 
 int N =100000;
-	int xx=136; 
+	int xx=250; 
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 =xx *720 *sizeof(int);
 	size_t l=720*sizeof(int);
