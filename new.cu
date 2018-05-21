@@ -17,7 +17,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
 {
 	int idxx = blockIdx.x * blockDim.x + threadIdx.x; 
-	int idy =  threadIdx.y; 
+	int idy= blockIdx.y*blockDim.y+threadIdx.y;
 	
 	int idx;
 	idx=idxx*1024 +idy; 
