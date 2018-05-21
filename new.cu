@@ -16,18 +16,18 @@ using namespace std;
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
 
 {
-	int idxx = blockIdx.x * blockDim.x + threadIdx.x; 
-	int idy= blockIdx.y*blockDim.y+threadIdx.y;
+	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
+	//int idy= blockIdx.y*blockDim.y+threadIdx.y;
 	
-	int idx;
-	idx=idxx*1024 +idy; 
+	//int idx;
+	//idx=idxx*1024 +idy; 
 
 	float ac;//721? koliko puta ucitavas i gde  da mnozis...zasto float proveri koliko imas preracunavanja
     int angle; float fix1=3.14/(60*180); float fix2=57;
     
    
     __shared__ int mn[720], r[720], s[720];
-    if(threadIdx.x==0 && threadIdx.y==0)
+    if(threadIdx.x==0 )
     {
         for (int i=0;i<720;i++)
 	{ mn[i] = 0; r[i]=0;s[i]=0;} 
@@ -71,7 +71,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
     __syncthreads();
 
-      if(threadIdx.x==0 && threadIdx.y==0)
+      if(threadIdx.x==0)
     {
         for(int i=0;i<720;i++)
 	{ hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; hist_s[i+(blockIdx.x*720)]=s[i];}
@@ -92,7 +92,7 @@ start = clock();
 	
 
 int N =100000;
-	int xx=10; 
+	int xx=136; 
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 =xx *720 *sizeof(int);
 	size_t l=720*sizeof(int);
