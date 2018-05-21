@@ -10,7 +10,7 @@
 #include "cuda.h"
 #include<cuda_runtime.h>
 #include <time.h>
-#include "koolplot.h"
+
 
 
 using namespace std;
