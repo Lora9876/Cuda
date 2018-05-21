@@ -163,7 +163,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	
 	for(int i=0; i<720; i++)
 		{printf("%f ", final[i]);
-	
+		}
 	
 		/*for(int i=0; i<720; i++)
 			brk+=(double) result[i]; 
