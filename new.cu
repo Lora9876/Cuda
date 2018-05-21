@@ -161,7 +161,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	printf("%f\n", cpu_time_used); 
 	FILE *gnuplot = popen("gnuplot", "w");
 	fprintf(gnuplot, "plot '-'\n");
-		for (i = 0; i < count; i++)
+		for (int i = 0; i < 720; i++)
     		fprintf(gnuplot, "%g %g\n", result_s[i], result_r[i]);
 			fprintf(gnuplot, "e\n");
 			fflush(gnuplot);
