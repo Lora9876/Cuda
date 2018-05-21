@@ -19,11 +19,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
 {
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
-	//int idy= blockIdx.y*blockDim.y+threadIdx.y;
 	
-	//int idx;
-	//idx=idxx*1024 +idy; 
-
 	float ac;//721? koliko puta ucitavas i gde  da mnozis...zasto float proveri koliko imas preracunavanja
     int angle; float fix1=3.14/(60*180); float fix2=57;
     
@@ -40,7 +36,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
    if ( idx<100000)
     {
       
-        for(int i=0; i<50000; i++)
+        for(int i=0; i<100000; i++)
         	{
 		   
             ac= acosf((sin(b0[idx]*fix1)*sin(b1[i]*fix1))+ cos(b0[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[i]-a0[idx])*fix1));
@@ -64,45 +60,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
                 }
 	
            }
-	else if(idx<200000)
-	{
-	idx-=100000; 
-	for(int i=50000; i<100000; i++)
-        	{
-		   
-            ac= acosf((sin(b0[idx]*fix1)*sin(b1[i]*fix1))+ cos(b0[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[i]-a0[idx])*fix1));
-		ac= (ac*fix2/0.25); 
 	
-		angle=(int) ac; 
-		  atomicAdd(&mn[angle],1);
-		}
-		
-	   for(int i=idx+1; i<100000;i++)
-	    {  ac= acosf((sin(b0[idx]*fix1)*sin(b0[i]*fix1))+ cos(b0[idx]*fix1)*cos(b0[i]*fix1)*cos((a0[i]-a0[idx])*fix1));
-	    ac= (ac*fix2/0.25); 
-            angle=(int) ac; 
-            atomicAdd(&r[angle],1);
-	     
-            ac= acosf((sin(b1[idx]*fix1)*sin(b1[i]*fix1))+ cos(b1[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[idx]-a1[i])*fix1));
-            ac= (ac*fix2/0.25); 
-	    angle=(int) ac; 
-            atomicAdd(&s[angle],1);
-
-                }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	}
-        
-    
 
     __syncthreads();
 
