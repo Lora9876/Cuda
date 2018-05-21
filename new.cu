@@ -10,6 +10,7 @@
 #include "cuda.h"
 #include<cuda_runtime.h>
 #include <time.h>
+#include "koolplot.h"
 
 
 using namespace std;
@@ -185,6 +186,8 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	printf("\n treca\n " ) ; 
 	for(int i=0; i<720; i++)
 		{printf("%d ", result_s[i]);   }*/
+	 Plotdata x(-3.0, 3.0), y = sin(x) - 0.5*x;
+   plot(x, y);
 
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);cudaFree(d_D);cudaFree(h_D);cudaFree(d_E);cudaFree(h_E);
