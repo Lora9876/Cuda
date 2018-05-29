@@ -31,7 +31,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	{ mn[i] = 0; r[i]=0;s[i]=0;  mn1[i] = 0; r1[i]=0;s1[i]=0; mn2[i] = 0; r2[i]=0;s2[i]=0; mn3[i] = 0; r3[i]=0;s3[i]=0;
 	 } 
     }
-    __syncthreads();
+    __syncthreads(); 
 
 
    if ( idx<100000)
