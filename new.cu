@@ -92,8 +92,10 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     {
         for(int i=0;i<180;i++)
 	{  
-		
-		hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; hist_s[i+(blockIdx.x*720)]=s[i];}
+		hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; hist_s[i+(blockIdx.x*720)]=s[i];
+		hist[i+180+(blockIdx.x*720)]=mn1[i]; hist_r[i+180+(blockIdx.x*720)]=r1[i]; hist_s[i+180+(blockIdx.x*720)]=s1[i];
+		hist[i+360+(blockIdx.x*720)]=mn2[i]; hist_r[i+360+(blockIdx.x*720)]=r2[i]; hist_s[i+360+(blockIdx.x*720)]=s2[i];
+		hist[i+540+(blockIdx.x*720)]=mn3[i]; hist_r[i+540+(blockIdx.x*720)]=r3[i]; hist_s[i+540+(blockIdx.x*720)]=s3[i];}
     }
 
 }
