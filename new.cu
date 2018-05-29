@@ -24,10 +24,10 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     int angle; float fix1=3.14/(60*180); float fix2=57;
     
    
-    __shared__ int mn[27][27], r[27][27], s[27][27];
+    __shared__ int mn[180], r[180], s[180];
    if(threadIdx.x==0 )
     {
-        for (int i=0;i<720;i++)
+        for (int i=0;i<180;i++)
 	{ mn[i] = 0; r[i]=0;s[i]=0;} 
     }
     __syncthreads();
@@ -67,7 +67,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
       if(threadIdx.x==0)
     {
-        for(int i=0;i<720;i++)
+        for(int i=0;i<180;i++)
 	{  
 		
 		hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; hist_s[i+(blockIdx.x*720)]=s[i];}
@@ -88,7 +88,7 @@ start = clock();
 	
 
 int N =100000;
-	int xx=136; 
+	int xx=521; 
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 =xx *720 *sizeof(int);
 	size_t l=720*sizeof(int);
@@ -126,7 +126,7 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_A1, h_A1, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
-	dim3 threadsPerBlock(736); 
+	dim3 threadsPerBlock(192);
 	
  
     dim3 blocksPerGrid(xx); 
