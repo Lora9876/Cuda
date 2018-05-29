@@ -44,18 +44,10 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	
 		angle=(int) ac; 
 		  atomicAdd(&mn[angle],1);
-		ac= acosf((sin(b0[idx]*fix1)*sin(b0[i]*fix1))+ cos(b0[idx]*fix1)*cos(b0[i]*fix1)*cos((a0[i]-a0[idx])*fix1));
-	    ac= (ac*fix2/0.25); 
-            angle=(int) ac; 
-            atomicAdd(&r[angle],1);
-	     
-            ac= acosf((sin(b1[idx]*fix1)*sin(b1[i]*fix1))+ cos(b1[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[idx]-a1[i])*fix1));
-            ac= (ac*fix2/0.25); 
-	    angle=(int) ac; 
-            atomicAdd(&s[angle],1);
+		
 		}
 		
-	 /*  for(int i=idx+1; i<100000;i++)
+	   for(int i=idx+1; i<100000;i++)
 	    {  ac= acosf((sin(b0[idx]*fix1)*sin(b0[i]*fix1))+ cos(b0[idx]*fix1)*cos(b0[i]*fix1)*cos((a0[i]-a0[idx])*fix1));
 	    ac= (ac*fix2/0.25); 
             angle=(int) ac; 
@@ -66,7 +58,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	    angle=(int) ac; 
             atomicAdd(&s[angle],1);
 
-                }*/
+                }
 	
            }
 	
@@ -86,13 +78,13 @@ int main(int argc, char *argv[])
 FILE *real_g; FILE *synthetic_g;
 int galaxies_r, galaxies_s; 
 clock_t start, end;
-start = clock();
+
 	real_g = fopen("data_100k_arcmin.txt","r");
     	synthetic_g = fopen("flat_100k_arcmin.txt","r");	
 	fscanf(real_g, "%d", &galaxies_r);
 	fscanf(synthetic_g,  "%d", &galaxies_s);
 	
-
+start = clock();
 int N =100000;
 	int xx=250; 
 size_t arraybytes = N * sizeof(float);
