@@ -24,10 +24,10 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     int angle; float fix1=3.14/(60*180); float fix2=57;
     
    
-    __shared__ int mn[180], r[180], s[180];
+    __shared__ int mn[720], r[720], s[720];
    if(threadIdx.x==0 )
     {
-        for (int i=0;i<180;i++)
+        for (int i=0;i<720;i++)
 	{ mn[i] = 0; r[i]=0;s[i]=0;} 
     }
     __syncthreads();
@@ -67,7 +67,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
       if(threadIdx.x==0)
     {
-        for(int i=0;i<180;i++)
+        for(int i=0;i<720;i++)
 	{  
 		
 		hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; hist_s[i+(blockIdx.x*720)]=s[i];}
