@@ -155,8 +155,10 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	printf("%f\n", cpu_time_used); 
 	
 	for(int i=0; i<720; i++)
-		{printf("%f ", final[i]);
-		}
+		{
+		if(final[i]>0) brk++; }
+		printf("%f ", brk);
+		
 	
 		/*for(int i=0; i<720; i++)
 			brk+=(double) result[i]; 
