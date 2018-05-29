@@ -25,12 +25,12 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     
    
     __shared__ int mn[720], r[720], s[720];
-   /* if(threadIdx.x==0 )
+   if(threadIdx.x==0 )
     {
         for (int i=0;i<720;i++)
 	{ mn[i] = 0; r[i]=0;s[i]=0;} 
     }
-    __syncthreads();*/
+    __syncthreads();
 
 
    if ( idx<100000)
@@ -68,7 +68,8 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
       if(threadIdx.x==0)
     {
         for(int i=0;i<720;i++)
-	{ hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; hist_s[i+(blockIdx.x*720)]=s[i];}
+	{  hist[i+(blockIdx.x*720)]= (r[i]-2*mn[i]+s[i]) ;
+		//hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; hist_s[i+(blockIdx.x*720)]=s[i];}
     }
 
 }
@@ -142,11 +143,11 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<720*xx; i++)
-	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
+	{	result[i%720]+= h_C[i];/*result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];*/} 
 
 		
-	for(int i=0;i<720;i++)
-		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]); 
+/*	for(int i=0;i<720;i++)
+		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]); */
 	
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
@@ -157,7 +158,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	for(int i=0; i<720; i++)
 		{
 		 
-		printf("%f ", final[i]);
+		printf("%f ", result[i]);
 	}
 	
 		/*for(int i=0; i<720; i++)
