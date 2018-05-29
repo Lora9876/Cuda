@@ -24,11 +24,12 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     int angle; float fix1=3.14/(60*180); float fix2=57;
     
    
-    __shared__ int mn[720], r[720], s[720];
+    __shared__ int mn[180], mn1[180], mn2[180], mn3[180], r[180], r1[180], r2[180], r3[180], s[180], s1[180], s2[180], s3[180];
    if(threadIdx.x==0 )
     {
         for (int i=0;i<720;i++)
-	{ mn[i] = 0; r[i]=0;s[i]=0;} 
+	{ mn[i] = 0; r[i]=0;s[i]=0;  mn1[i] = 0; r1[i]=0;s1[i]=0; mn2[i] = 0; r2[i]=0;s2[i]=0; mn3[i] = 0; r3[i]=0;s3[i]=0;
+	 } 
     }
     __syncthreads();
 
@@ -43,20 +44,42 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		ac= (ac*fix2/0.25); 
 	
 		angle=(int) ac; 
-		  atomicAdd(&mn[angle],1);
-		
+		if(ac>539) 
+		  atomicAdd(&mn3[angle-540],1);
+		else if(ac>359)
+			atomicAdd(&mn2[angle-360],1);
+		else if(ac>179)
+			atomicAdd(&mn1[angle-179],1);
+		else 
+			atomicAdd(&mn[angle],1);
 		}
 		
 	   for(int i=idx+1; i<100000;i++)
 	    {  ac= acosf((sin(b0[idx]*fix1)*sin(b0[i]*fix1))+ cos(b0[idx]*fix1)*cos(b0[i]*fix1)*cos((a0[i]-a0[idx])*fix1));
 	    ac= (ac*fix2/0.25); 
             angle=(int) ac; 
-            atomicAdd(&r[angle],1);
+            if(ac>539) 
+		  atomicAdd(&r3[angle-540],1);
+		else if(ac>359)
+			atomicAdd(&r2[angle-360],1);
+		else if(ac>179)
+			atomicAdd(&r1[angle-179],1);
+		else 
+			atomicAdd(&r[angle],1);
+		}
 	     
             ac= acosf((sin(b1[idx]*fix1)*sin(b1[i]*fix1))+ cos(b1[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[idx]-a1[i])*fix1));
             ac= (ac*fix2/0.25); 
 	    angle=(int) ac; 
-            atomicAdd(&s[angle],1);
+            if(ac>539) 
+		  atomicAdd(&s3[angle-540],1);
+		else if(ac>359)
+			atomicAdd(&s2[angle-360],1);
+		else if(ac>179)
+			atomicAdd(&s1[angle-179],1);
+		else 
+			atomicAdd(&s[angle],1);
+		}
 
                 }
 	
@@ -67,7 +90,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 
       if(threadIdx.x==0)
     {
-        for(int i=0;i<720;i++)
+        for(int i=0;i<180;i++)
 	{  
 		
 		hist[i+(blockIdx.x*720)]=mn[i]; hist_r[i+(blockIdx.x*720)]=r[i]; hist_s[i+(blockIdx.x*720)]=s[i];}
@@ -88,7 +111,7 @@ start = clock();
 	
 
 int N =100000;
-	int xx=137; 
+	int xx=530; 
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 =xx *720 *sizeof(int);
 	size_t l=720*sizeof(int);
@@ -126,7 +149,7 @@ cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_A1, h_A1, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
-	dim3 threadsPerBlock(736);
+	dim3 threadsPerBlock(192);
 	
  
     dim3 blocksPerGrid(xx); 
