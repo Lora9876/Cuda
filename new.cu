@@ -84,7 +84,7 @@ clock_t start, end;
 	fscanf(real_g, "%d", &galaxies_r);
 	fscanf(synthetic_g,  "%d", &galaxies_s);
 	
-start = clock();
+
 int N =100000;
 	int xx=250; 
 size_t arraybytes = N * sizeof(float);
@@ -134,6 +134,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
     cudaMemset(d_C,0,arraybytes1);
 	cudaMemset(d_D,0,arraybytes1);
 	cudaMemset(d_E,0,arraybytes1);
+	start = clock();
 		angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
 
       cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
