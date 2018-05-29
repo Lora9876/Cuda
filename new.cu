@@ -66,7 +66,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 			atomicAdd(&r1[angle-179],1);
 		else 
 			atomicAdd(&r[angle],1);
-		}
+		
 	     
             ac= acosf((sin(b1[idx]*fix1)*sin(b1[i]*fix1))+ cos(b1[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[idx]-a1[i])*fix1));
             ac= (ac*fix2/0.25); 
@@ -79,7 +79,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 			atomicAdd(&s1[angle-179],1);
 		else 
 			atomicAdd(&s[angle],1);
-		}
+		
 
                 }
 	
