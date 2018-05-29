@@ -25,12 +25,12 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     
    
     __shared__ int mn[720], r[720], s[720];
-    if(threadIdx.x==0 )
+   /* if(threadIdx.x==0 )
     {
         for (int i=0;i<720;i++)
 	{ mn[i] = 0; r[i]=0;s[i]=0;} 
     }
-    __syncthreads();
+    __syncthreads();*/
 
 
    if ( idx<100000)
