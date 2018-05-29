@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 FILE *real_g; FILE *synthetic_g;
 int galaxies_r, galaxies_s; 
 clock_t start, end;
-
+start = clock();
 	real_g = fopen("data_100k_arcmin.txt","r");
     	synthetic_g = fopen("flat_100k_arcmin.txt","r");	
 	fscanf(real_g, "%d", &galaxies_r);
@@ -86,7 +86,7 @@ clock_t start, end;
 	
 
 int N =100000;
-	int xx=250; 
+	int xx=136; 
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 =xx *720 *sizeof(int);
 	size_t l=720*sizeof(int);
@@ -134,7 +134,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
     cudaMemset(d_C,0,arraybytes1);
 	cudaMemset(d_D,0,arraybytes1);
 	cudaMemset(d_E,0,arraybytes1);
-	start = clock();
+	
 		angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
 
       cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
