@@ -144,11 +144,11 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<720*xx; i++)
-	{	result[i%720]+= h_C[i];/*result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];*/} 
+	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
 
 		
-/*	for(int i=0;i<720;i++)
-		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]); */
+	for(int i=0;i<720;i++)
+		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]); 
 	
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
