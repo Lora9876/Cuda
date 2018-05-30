@@ -149,7 +149,7 @@ cudaMemcpy(d_A1, h_A1, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 	dim3 threadsPerBlock(128);
-	int blocksize2=4399;
+	dim3 blocksize2(4400);
  
     dim3 blocksPerGrid(xx); 
      double cpu_time_used;
