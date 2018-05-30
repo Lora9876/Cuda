@@ -44,11 +44,11 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		ac= (ac*fix2/0.25); 
 	
 		angle=(int) ac; 
-		if(ac>539) 
+		if(angle>539) 
 		  atomicAdd(&mn3[angle-540],1);
-		else if(ac>359)
+		else if(angle>359)
 			atomicAdd(&mn2[angle-360],1);
-		else if(ac>179)
+		else if(angle>179)
 			atomicAdd(&mn1[angle-180],1);
 		else 
 			atomicAdd(&mn[angle],1);
@@ -58,27 +58,27 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	    {  ac= acosf((sin(b0[idx]*fix1)*sin(b0[i]*fix1))+ cos(b0[idx]*fix1)*cos(b0[i]*fix1)*cos((a0[i]-a0[idx])*fix1));
 	    ac= (ac*fix2/0.25); 
             angle=(int) ac; 
-            if(ac>539) 
-		  atomicAdd(&r3[angle-540],1);
-		else if(ac>359)
-			atomicAdd(&r2[angle-360],1);
-		else if(ac>179)
-			atomicAdd(&r1[angle-180],1);
+            if(angle>539) 
+		  atomicAdd(&mn3[angle-540],1);
+		else if(angle>359)
+			atomicAdd(&mn2[angle-360],1);
+		else if(angle>179)
+			atomicAdd(&mn1[angle-180],1);
 		else 
-			atomicAdd(&r[angle],1);
+			atomicAdd(&mn[angle],1);
 		
 	     
             ac= acosf((sin(b1[idx]*fix1)*sin(b1[i]*fix1))+ cos(b1[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[idx]-a1[i])*fix1));
             ac= (ac*fix2/0.25); 
 	    angle=(int) ac; 
-            if(ac>539) 
-		  atomicAdd(&s3[angle-540],1);
-		else if(ac>359)
-			atomicAdd(&s2[angle-360],1);
-		else if(ac>179)
-			atomicAdd(&s1[angle-180],1);
+           if(angle>539) 
+		  atomicAdd(&mn3[angle-540],1);
+		else if(angle>359)
+			atomicAdd(&mn2[angle-360],1);
+		else if(angle>179)
+			atomicAdd(&mn1[angle-180],1);
 		else 
-			atomicAdd(&s[angle],1);
+			atomicAdd(&mn[angle],1);
 		
 
                 }
