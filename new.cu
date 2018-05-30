@@ -173,9 +173,9 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
 
 	result_r[0]=result_r[0]+100000; result_s[0]=result_s[0]+100000; 
-	cudaMemcpy(result, d_result, l, cudaMemcpyDeviceToHost);
-	cudaMemcpy(result_r, d_result_r, l, cudaMemcpyDeviceToHost);
-	cudaMemcpy(result_s, d_result_s, l, cudaMemcpyDeviceToHost);
+	cudaMemcpy(result, d_result, l, cudaMemcpyHostToDevice);
+	cudaMemcpy(result_r, d_result_r, l, cudaMemcpyHostToDevice);
+	cudaMemcpy(result_s, d_result_s, l, cudaMemcpyHostToDevice);
 	finishing<<<blocksize2, threadsPerBlock1>>>(d_result_r, d_result,d_result_s, d_final);
 	/*final[0]=(float) ((float)(result_r[0]-2*result[0]+result_s[0]+200000)/(float)(100000+ result_s[0]));	
 	for(int i=1;i<720;i++)
