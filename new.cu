@@ -40,7 +40,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
         for(int i=0; i<100000; i++)
         	{
 		k=b1[i];
-		sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880;
+		sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
            ac= acosf(sb0*sb1+ cb0*cos(b1[i])*cos((a1[i]-a0[idx])));
 		ac= (ac*fix2/0.25); 
 	
