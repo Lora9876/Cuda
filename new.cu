@@ -19,7 +19,7 @@ __global__ void finishing(volatile int *real, volatile int *mix, volatile int *s
 {
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
 	if(idx<563040)
-	result[idx]=((float)(real[idx]-2*mix[idx]+synthetic[idx]))/((float) synthetic[idx]); 
+	result[idx]=(float) ((float)(real[idx]-2*mix[idx]+synthetic[idx]))/((float) synthetic[idx]); 
 	
 }
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
@@ -149,7 +149,8 @@ cudaMemcpy(d_A1, h_A1, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 	dim3 threadsPerBlock(128);
-	dim3 blocksize2(4400);
+	dim3 threadsPerBlock1(1024);
+	dim3 blocksize2(550);
  
     dim3 blocksPerGrid(xx); 
      double cpu_time_used;
@@ -160,7 +161,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	cudaMemset(d_E,0,arraybytes1);
 	cudaMemset(d_final,0,arraybytes11);
 		angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
-		finishing<<<blocksize2, threadsPerBlock>>>(d_D, d_C, d_E, d_final); 
+		finishing<<<blocksize2, threadsPerBlock1>>>(d_D, d_C, d_E, d_final); 
      /* cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);
