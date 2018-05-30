@@ -23,15 +23,17 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	
 	float ac, bb0,sb1,sb0,cb0,k,bb1,ssb1,cb1,ccb1; 
     int angle;  float fix2=57;
-    	 
+    	 bb0=b0[idx];  bb1=b1[idx]; ssb1=sin(bb1); 
+     		sb0=sin(bb0); cb0=cos(bb0); cb1=cos(bb1);
     __shared__ int mn[720], r[720], s[720];
-	
+	__shared__ float sss[100000],sss1[100000];
    if(threadIdx.x==0 )
     {
         for (int i=0;i<720;i++)
 	{ mn[i] = 0; r[i]=0;s[i]=0;} 
-	   bb0=b0[idx];  bb1=b1[idx]; ssb1=sin(bb1); 
-     		sb0=sin(bb0); cb0=cos(bb0); cb1=cos(bb1);
+	   for(int i=0; i<100000;i++)
+	   { sss[i]=a1[i]; sss1[i]=b1[i]; } 
+	   
     }
     __syncthreads();
 
@@ -41,11 +43,11 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
       
         for(int i=0; i<100000; i++)
         	{
-		k=b1[i];
+		k=sss1[i];
 		sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
-		k=b1[i];
+		//k=b1[i];
 		ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;
-           ac= acosf(sb0*sb1+ cb0*ccb1*cos((a1[i]-a0[idx])));
+           ac= acosf(sb0*sb1+ cb0*ccb1*cos((sss[i]-a0[idx])));
 		ac= (ac*fix2/0.25); 
 	
 		angle=(int) ac; 
@@ -62,10 +64,10 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	    ac= (ac*fix2/0.25); 
             angle=(int) ac; 
             atomicAdd(&r[angle],2);
-	     	   k=b1[i];
+	     	   k=sss1[i];
 		   sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
 		   ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;
-          ac= acosf((ssb1*sb1)+ cb1*ccb1*cos((a1[idx]-a1[i])));
+          ac= acosf((ssb1*sb1)+ cb1*ccb1*cos((sss[idx]-sss[i])));
             ac= (ac*fix2/0.25); 
 	    angle=(int) ac; 
             atomicAdd(&s[angle],2);
