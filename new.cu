@@ -18,7 +18,7 @@ using namespace std;
 __global__ void finishing(int *real,  int *mix, int *synthetic, volatile float *result) 
 {
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
-	if(idx<563040 && idx!=0)
+	if(idx<720)
 	result[idx]=(float) ((float)(real[idx]-2*mix[idx]+synthetic[idx]))/((float) synthetic[idx]); 
 	
 }
