@@ -11,7 +11,7 @@
 #include "cuda.h"
 #include<cuda_runtime.h>
 #include <time.h>
-
+#define fix1 3.14/(60*180)
 
 
 using namespace std;
@@ -22,8 +22,8 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
 	
 	float ac, bb0,aa0,sb0,cb0; 
-    int angle; float fix1=3.14/(60*180); float fix2=57;
-    	bb0=b0[idx]*fix1; aa0=a0[idx]*fix1; 
+    int angle;  float fix2=57;
+    	bb0=b0[idx]*fix1; 
      sb0=sin(bb0); cb0=cos(bb0);
     __shared__ int mn[720], r[720], s[720];
    if(threadIdx.x==0 )
@@ -40,7 +40,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
         for(int i=0; i<100000; i++)
         	{
 		   
-           ac= acosf(sb0*sin(b1[i]*fix1)+ cb0*cos(b1[i]*fix1)*cos((a1[i]-a0[idx])*fix1));
+           ac= acosf(sb0*sin(b1[i])+ cb0*cos(b1[i])*cos((a1[i]-a0[idx])));
 		ac= (ac*fix2/0.25); 
 	
 		angle=(int) ac; 
@@ -49,12 +49,12 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		}
 		
 	   for(int i=idx+1; i<100000;i++)
-	    { ac= acosf(sb0*sin(b0[i]*fix1)+ cb0*cos(b0[i]*fix1)*cos((a0[i]-a0[idx])*fix1));
+	    { ac= acosf(sb0*sin(b0[i])+ cb0*cos(b0[i])*cos((a0[i]-a0[idx])));
 	    ac= (ac*fix2/0.25); 
             angle=(int) ac; 
             atomicAdd(&r[angle],1);
 	     
-          ac= acosf((sin(b1[idx]*fix1)*sin(b1[i]*fix1))+ cos(b1[idx]*fix1)*cos(b1[i]*fix1)*cos((a1[idx]-a1[i])*fix1));
+          ac= acosf((sin(b1[idx])*sin(b1[i]))+ cos(b1[idx])*cos(b1[i])*cos((a1[idx]-a1[i])));
             ac= (ac*fix2/0.25); 
 	    angle=(int) ac; 
             atomicAdd(&s[angle],1);
@@ -110,7 +110,8 @@ int* h_E = (int*)malloc(arraybytes1);
     {
        
         fscanf(real_g, "%e %e", &h_A[i], &h_B[i]);
-       fscanf(synthetic_g, "%e %e", &h_A1[i], &h_B1[i]);}
+       fscanf(synthetic_g, "%e %e", &h_A1[i], &h_B1[i]);
+	h_A[i]=h_A[i]*fix1; h_A1[i]=h_A1[i]*fix1; h_B[i]=h_B[i]*fix1; h_B1[i]=h_B1[i]*fix1; }
     fclose(real_g);
 	 fclose(synthetic_g);	
 	
@@ -163,25 +164,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 		printf("%f ", final[i]);
 	}
 	
-		/*for(int i=0; i<720; i++)
-			brk+=(double) result[i]; 
-	printf("%f\n ", brk);
-	brk=0;
-	for(int i=0; i<720; i++)
-			brk+=result_s[i]; 
-	printf("%f\n ", brk);
-	brk=0;
-	for(int i=0; i<720; i++)
-			brk+=result_r[i]; 
-	//printf("%f\n ", brk);
-	brk=0;
-		//{printf("%f ", final[i]);   }
-	/*printf("\n druga\n " ) ; 
-	for(int i=0; i<720; i++)
-		{printf("%d ", result_r[i]);   }
-	printf("\n treca\n " ) ; 
-	for(int i=0; i<720; i++)
-		{printf("%d ", result_s[i]);   }*/
+		
 	
 
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
