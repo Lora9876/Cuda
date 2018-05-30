@@ -27,7 +27,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
     __shared__ int mn[180], mn1[180], mn2[180], mn3[180], r[180], r1[180], r2[180], r3[180], s[180], s1[180], s2[180], s3[180];
    if(threadIdx.x==0 )
     {
-        for (int i=0;i<720;i++)
+        for (int i=0;i<180;i++)
 	{ mn[i] = 0; r[i]=0;s[i]=0;  mn1[i] = 0; r1[i]=0;s1[i]=0; mn2[i] = 0; r2[i]=0;s2[i]=0; mn3[i] = 0; r3[i]=0;s3[i]=0;
 	 } 
     }
@@ -49,7 +49,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		else if(ac>359)
 			atomicAdd(&mn2[angle-360],1);
 		else if(ac>179)
-			atomicAdd(&mn1[angle-179],1);
+			atomicAdd(&mn1[angle-180],1);
 		else 
 			atomicAdd(&mn[angle],1);
 		}
@@ -63,7 +63,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		else if(ac>359)
 			atomicAdd(&r2[angle-360],1);
 		else if(ac>179)
-			atomicAdd(&r1[angle-179],1);
+			atomicAdd(&r1[angle-180],1);
 		else 
 			atomicAdd(&r[angle],1);
 		
@@ -76,7 +76,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		else if(ac>359)
 			atomicAdd(&s2[angle-360],1);
 		else if(ac>179)
-			atomicAdd(&s1[angle-179],1);
+			atomicAdd(&s1[angle-180],1);
 		else 
 			atomicAdd(&s[angle],1);
 		
