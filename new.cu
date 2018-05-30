@@ -161,6 +161,13 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	cudaMemset(d_E,0,arraybytes1);
 	cudaMemset(d_final,0,arraybytes11);
 		angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
+	cudaMemcpy(h_C, d_C, arraybytes11, cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_D, d_D, arraybytes11, cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_E, d_E, arraybytes11, cudaMemcpyDeviceToHost);
+	cudaMemcpy(d_C, h_C, arraybytes, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_D, h_D, arraybytes, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_E, h_E, arraybytes, cudaMemcpyHostToDevice);
+	
 		finishing<<<blocksize2, threadsPerBlock1>>>(d_D, d_C, d_E, d_final); 
      /* cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
