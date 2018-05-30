@@ -120,11 +120,11 @@ float* h_B1 = (float*)malloc(arraybytes);
 int* h_C = (int*)malloc(arraybytes1); 
 int* h_D = (int*)malloc(arraybytes1); 	
 int* h_E = (int*)malloc(arraybytes1); 	
-	float* h_final = (float*)malloc(arraybytes11); 
+	float* h_final = (float*)malloc(l1); 
 	int* result=(int*)malloc(l); 
 	int* result_r=(int*)malloc(l); 
 	int* result_s=(int*)malloc(l); 
-	float* final=(float*)malloc(l1); 
+	
 	for(int i=0; i<galaxies_r; i++)
     {
        
@@ -142,9 +142,9 @@ int* d_C; cudaMalloc(&d_C, arraybytes1);
 	int* d_D; cudaMalloc(&d_D, arraybytes1);
 	int* d_E; cudaMalloc(&d_E, arraybytes1);
 	float* d_final; cudaMalloc(&d_final, l1);
-	float* d_result; cudaMalloc(&d_result, l);
-	float* d_result_r; cudaMalloc(&d_result_r, l);
-	float* d_result_s; cudaMalloc(&d_result_s, l);
+	int* d_result; cudaMalloc(&d_result, l);
+	int* d_result_r; cudaMalloc(&d_result_r, l);
+	int* d_result_s; cudaMalloc(&d_result_s, l);
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
