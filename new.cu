@@ -23,13 +23,15 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	
 	float ac, bb0,sb1,sb0,cb0,k,bb1,ssb1,cb1,ccb1; 
     int angle;  float fix2=57;
-    	bb0=b0[idx];  bb1=b1[idx]; ssb1=sin(bb1); 
-     sb0=sin(bb0); cb0=cos(bb0); cb1=cos(bb1); 
+    	 
     __shared__ int mn[720], r[720], s[720];
+	
    if(threadIdx.x==0 )
     {
         for (int i=0;i<720;i++)
 	{ mn[i] = 0; r[i]=0;s[i]=0;} 
+	   bb0=b0[idx];  bb1=b1[idx]; ssb1=sin(bb1); 
+     		sb0=sin(bb0); cb0=cos(bb0); cb1=cos(bb1);
     }
     __syncthreads();
 
