@@ -15,7 +15,12 @@
 
 
 using namespace std;
-
+__global__ void finishing(volatile int *real, volatile int *mix, volatile int *synthetic, volatile int *result) 
+{
+	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
+	result[idx]=(real-2*mix+synthetic)/synthetic; 
+	
+}
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
 
 {
@@ -104,7 +109,7 @@ int N =100000;
 size_t arraybytes = N * sizeof(float);
 	size_t arraybytes1 =xx *720 *sizeof(int);
 	size_t l=720*sizeof(int);
-	size_t l1=720*sizeof(float);
+	size_t l1=720*sizeof(float); // ovo proveri
 // Allocate input vectors h_A and h_B in host memory
 float* h_A = (float*)malloc(arraybytes);
 float* h_B = (float*)malloc(arraybytes);
@@ -113,10 +118,11 @@ float* h_B1 = (float*)malloc(arraybytes);
 int* h_C = (int*)malloc(arraybytes1); 
 int* h_D = (int*)malloc(arraybytes1); 	
 int* h_E = (int*)malloc(arraybytes1); 	
-	int* result=(int*)malloc(l); 
-	int* result_r=(int*)malloc(l); 
+	float* h_final = (float*)malloc(arraybytes1); 
+	float* result=(float*)malloc(l1); 
+	/*int* result_r=(int*)malloc(l); 
 	int* result_s=(int*)malloc(l); 
-	float* final=(float*)malloc(l1); 
+	float* final=(float*)malloc(l1); */
 	for(int i=0; i<galaxies_r; i++)
     {
        
@@ -133,6 +139,7 @@ float* d_B1; cudaMalloc(&d_B1, arraybytes);
 int* d_C; cudaMalloc(&d_C, arraybytes1);
 	int* d_D; cudaMalloc(&d_D, arraybytes1);
 	int* d_E; cudaMalloc(&d_E, arraybytes1);
+	float* d_final; cudaMalloc(&d_final, arraybytes1);
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
@@ -140,7 +147,7 @@ cudaMemcpy(d_A1, h_A1, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 	dim3 threadsPerBlock(128);
-	
+	int blocksize2=4399;
  
     dim3 blocksPerGrid(xx); 
      double cpu_time_used;
@@ -149,10 +156,10 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
     cudaMemset(d_C,0,arraybytes1);
 	cudaMemset(d_D,0,arraybytes1);
 	cudaMemset(d_E,0,arraybytes1);
-	
+	cudaMemset(d_final,0,arraybytes1);
 		angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
-
-      cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
+		angles<<blocksize2, threadsPerBlock>>(d_C, d_D, d_E, d_final); 
+     /* cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);
 	
@@ -161,8 +168,11 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 
 	final[0]=(float) ((float)(result_r[0]-2*result[0]+result_s[0]+200000)/(float)(100000+ result_s[0]));	
 	for(int i=1;i<720;i++)
-		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]); 
+		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]); */
 	
+	cudaMemcpy(h_final, d_final, arraybytes1, cudaMemcpyDeviceToHost);
+	for(int i=0; i<720*xx; i++)
+	{	result[i%720]+= h_final[i];}
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	
@@ -172,7 +182,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	for(int i=0; i<720; i++)
 		{
 		 
-		printf( "%f ", final[i]);
+		printf( "%f ", result[i]);
 	}
 	
 		
