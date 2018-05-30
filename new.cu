@@ -121,17 +121,17 @@ int* h_C = (int*)malloc(arraybytes1);
 int* h_D = (int*)malloc(arraybytes1); 	
 int* h_E = (int*)malloc(arraybytes1); 	
 	float* h_final = (float*)malloc(arraybytes11); 
-	float* result=(float*)malloc(l1); 
-	/*int* result_r=(int*)malloc(l); 
+	int* result=(int*)malloc(l); 
+	int* result_r=(int*)malloc(l); 
 	int* result_s=(int*)malloc(l); 
-	float* final=(float*)malloc(l1); */
+	float* final=(float*)malloc(l1); 
 	for(int i=0; i<galaxies_r; i++)
     {
        
         fscanf(real_g, "%e %e", &h_A[i], &h_B[i]);
        fscanf(synthetic_g, "%e %e", &h_A1[i], &h_B1[i]);
 	h_A[i]=h_A[i]*fix1; h_A1[i]=h_A1[i]*fix1; h_B[i]=h_B[i]*fix1; h_B1[i]=h_B1[i]*fix1; }
-    fclose(real_g);
+         fclose(real_g);
 	 fclose(synthetic_g);	
 	
 float* d_A; cudaMalloc(&d_A, arraybytes);
@@ -141,7 +141,10 @@ float* d_B1; cudaMalloc(&d_B1, arraybytes);
 int* d_C; cudaMalloc(&d_C, arraybytes1);
 	int* d_D; cudaMalloc(&d_D, arraybytes1);
 	int* d_E; cudaMalloc(&d_E, arraybytes1);
-	float* d_final; cudaMalloc(&d_final, arraybytes11);
+	float* d_final; cudaMalloc(&d_final, l1);
+	float* d_result; cudaMalloc(&d_result, l);
+	float* d_result_r; cudaMalloc(&d_result_r, l);
+	float* d_result_s; cudaMalloc(&d_result_s, l);
 // Copy arrays from host memory to device memory
 cudaMemcpy(d_A, h_A, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B, h_B, arraybytes, cudaMemcpyHostToDevice);
@@ -149,8 +152,8 @@ cudaMemcpy(d_A1, h_A1, arraybytes, cudaMemcpyHostToDevice);
 cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 // Invoke kernel
 	dim3 threadsPerBlock(128);
-	dim3 threadsPerBlock1(1024);
-	dim3 blocksize2(550);
+	dim3 threadsPerBlock1(736);
+	dim3 blocksize2(1);
  
     dim3 blocksPerGrid(xx); 
      double cpu_time_used;
@@ -161,28 +164,26 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	cudaMemset(d_E,0,arraybytes1);
 	cudaMemset(d_final,0,arraybytes11);
 		angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
-	cudaMemcpy(h_C, d_C, arraybytes11, cudaMemcpyDeviceToHost);
-	cudaMemcpy(h_D, d_D, arraybytes11, cudaMemcpyDeviceToHost);
-	cudaMemcpy(h_E, d_E, arraybytes11, cudaMemcpyDeviceToHost);
-	cudaMemcpy(d_C, h_C, arraybytes, cudaMemcpyHostToDevice);
-	cudaMemcpy(d_D, h_D, arraybytes, cudaMemcpyHostToDevice);
-	cudaMemcpy(d_E, h_E, arraybytes, cudaMemcpyHostToDevice);
-	
-		finishing<<<blocksize2, threadsPerBlock1>>>(d_D, d_C, d_E, d_final); 
-     /* cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
+		
+     cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);
 	
 	for(int i=0; i<720*xx; i++)
 	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
 
-	final[0]=(float) ((float)(result_r[0]-2*result[0]+result_s[0]+200000)/(float)(100000+ result_s[0]));	
+	result_r[0]=result_r[0]+100000; result_s[0]=result_s[0]+100000; 
+	cudaMemcpy(result, d_result, l, cudaMemcpyDeviceToHost);
+	cudaMemcpy(result_r, d_result_r, l, cudaMemcpyDeviceToHost);
+	cudaMemcpy(result_s, d_result_s, l, cudaMemcpyDeviceToHost);
+	finishing<<<blocksize2, threadsPerBlock1>>>(d_result_r, d_result,d_result_s, d_final);
+	/*final[0]=(float) ((float)(result_r[0]-2*result[0]+result_s[0]+200000)/(float)(100000+ result_s[0]));	
 	for(int i=1;i<720;i++)
-		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]); */
+		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]);*/
 	
-	cudaMemcpy(h_final, d_final, arraybytes11, cudaMemcpyDeviceToHost);
-	for(int i=0; i<563040; i++)
-	{	result[i%720]+= h_final[i];}
+	cudaMemcpy(h_final, d_final, l1, cudaMemcpyDeviceToHost);
+	/*for(int i=0; i<563; i++)
+	{	result[i%720]+= h_final[i];}*/
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	
@@ -192,7 +193,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	for(int i=0; i<720; i++)
 		{
 		 
-		printf( "%f ", result[i]);
+		printf( "%f ", h_final[i]);
 	}
 	
 		
