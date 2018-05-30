@@ -23,7 +23,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	
 	float ac, bb0,aa0,sb0,cb0; 
     int angle;  float fix2=57;
-    	bb0=b0[idx]*fix1; 
+    	bb0=b0[idx]; 
      sb0=sin(bb0); cb0=cos(bb0);
     __shared__ int mn[720], r[720], s[720];
    if(threadIdx.x==0 )
