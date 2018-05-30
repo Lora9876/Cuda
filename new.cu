@@ -18,7 +18,7 @@ using namespace std;
 __global__ void finishing(volatile int *real, volatile int *mix, volatile int *synthetic, volatile float *result) 
 {
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
-	result[idx]=(float)((real-2*mix+synthetic))/(float) synthetic; 
+	result[idx]=((float)(real-2*mix+synthetic))/(float) synthetic; 
 	
 }
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
@@ -158,7 +158,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	cudaMemset(d_E,0,arraybytes1);
 	cudaMemset(d_final,0,arraybytes1);
 		angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
-		angles<<blocksize2, threadsPerBlock>>(d_C, d_D, d_E, d_final); 
+		finishing<<blocksize2, threadsPerBlock>>(d_C, d_D, d_E, d_final); 
      /* cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_D, d_D, arraybytes1, cudaMemcpyDeviceToHost);
 	cudaMemcpy(h_E, d_E, arraybytes1, cudaMemcpyDeviceToHost);
