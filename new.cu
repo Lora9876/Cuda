@@ -162,7 +162,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
     cudaMemset(d_C,0,arraybytes1);
 	cudaMemset(d_D,0,arraybytes1);
 	cudaMemset(d_E,0,arraybytes1);
-	cudaMemset(d_final,0,arraybytes11);
+	
 		angles<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B,d_A1, d_B1, d_C,d_D,d_E);
 		
      cudaMemcpy(h_C, d_C, arraybytes1, cudaMemcpyDeviceToHost);
@@ -176,6 +176,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	cudaMemcpy(result, d_result, l, cudaMemcpyHostToDevice);
 	cudaMemcpy(result_r, d_result_r, l, cudaMemcpyHostToDevice);
 	cudaMemcpy(result_s, d_result_s, l, cudaMemcpyHostToDevice);
+	cudaMemset(d_final,0,l1);
 	finishing<<<blocksize2, threadsPerBlock1>>>(d_result_r, d_result,d_result_s, d_final);
 	/*final[0]=(float) ((float)(result_r[0]-2*result[0]+result_s[0]+200000)/(float)(100000+ result_s[0]));	
 	for(int i=1;i<720;i++)
