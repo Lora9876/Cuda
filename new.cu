@@ -15,10 +15,10 @@
 
 
 using namespace std;
-__global__ void finishing(volatile int *real, volatile int *mix, volatile int *synthetic, volatile int *result) 
+__global__ void finishing(volatile int *real, volatile int *mix, volatile int *synthetic, volatile float *result) 
 {
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
-	result[idx]=(real-2*mix+synthetic)/synthetic; 
+	result[idx]=(float)((real-2*mix+synthetic))/(float) synthetic; 
 	
 }
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
