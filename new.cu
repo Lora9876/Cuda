@@ -59,14 +59,14 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		   ac= acosf(sb0*sb1+ cb0*ccb1*cos((a0[i]-a0[idx])));
 	    ac= (ac*fix2/0.25); 
             angle=(int) ac; 
-            atomicAdd(&r[angle],1);
+            atomicAdd(&r[angle],2);
 	     	   k=b1[i];
 		   sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
 		   ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;
           ac= acosf((ssb1*sb1)+ cb1*ccb1*cos((a1[idx]-a1[i])));
             ac= (ac*fix2/0.25); 
 	    angle=(int) ac; 
-            atomicAdd(&s[angle],1);
+            atomicAdd(&s[angle],2);
 
                 }
 	
@@ -159,7 +159,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 
 	final[0]=(float) ((float)(result_r[0]-2*result[0]+result_s[0]+200000)/(float)(100000+ result_s[0]));	
 	for(int i=1;i<720;i++)
-		final[i]=(float) ((float)(result_r[i]-result[i]+result_s[i])/(float) result_s[i]); 
+		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]); 
 	
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
