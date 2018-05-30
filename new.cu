@@ -166,11 +166,12 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	
 	double brk=0; 
 	printf("%f\n", cpu_time_used); 
-	
+	FILE *output; 
+	output=fopen("output.txt", "w"); 
 	for(int i=0; i<720; i++)
 		{
 		 
-		printf("%f ", final[i]);
+		fprintf(output, "%f ", final[i]);
 	}
 	
 		
