@@ -22,7 +22,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
 	
 	float ac, bb0,aa0,sb0,cb0; 
-    int angle;  float fix2=57;
+    int angle;  float fix2=228;
     	bb0=b0[idx]; 
      sb0=sin(bb0); cb0=cos(bb0);
     __shared__ int mn[720], r[720], s[720];
@@ -41,7 +41,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
         	{
 		   
            ac= acosf(sb0*sin(b1[i])+ cb0*cos(b1[i])*cos((a1[i]-a0[idx])));
-		ac= (ac*fix2/0.25); 
+		ac= (ac*fix2); 
 	
 		angle=(int) ac; 
 		  atomicAdd(&mn[angle],1);
@@ -50,12 +50,12 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		
 	   for(int i=idx+1; i<100000;i++)
 	    { ac= acosf(sb0*sin(b0[i])+ cb0*cos(b0[i])*cos((a0[i]-a0[idx])));
-	    ac= (ac*fix2/0.25); 
+	    ac= (ac*fix2); 
             angle=(int) ac; 
             atomicAdd(&r[angle],1);
 	     
           ac= acosf((sin(b1[idx])*sin(b1[i]))+ cos(b1[idx])*cos(b1[i])*cos((a1[idx]-a1[i])));
-            ac= (ac*fix2/0.25); 
+            ac= (ac*fix2); 
 	    angle=(int) ac; 
             atomicAdd(&s[angle],1);
 
