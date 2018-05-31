@@ -125,7 +125,7 @@ int* h_E = (int*)malloc(arraybytes1);
 	int* result=(int*)malloc(l); 
 	int* result_r=(int*)malloc(l); 
 	int* result_s=(int*)malloc(l); 
-	
+	float* final = (float*)malloc(l1); 
 	for(int i=0; i<galaxies_r; i++)
     {
        
@@ -173,7 +173,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	for(int i=0; i<720*xx; i++)
 	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
 
-	//result_r[0]=result_r[0]+100000; result_s[0]=result_s[0]+100000; 
+	result_r[0]=result_r[0]+100000; result_s[0]=result_s[0]+100000; 
 	cudaMemcpy(result, d_result, l, cudaMemcpyHostToDevice);
 	cudaMemcpy(result_r, d_result_r, l, cudaMemcpyHostToDevice);
 	cudaMemcpy(result_s, d_result_s, l, cudaMemcpyHostToDevice);
@@ -184,8 +184,8 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]);*/
 	
 	cudaMemcpy(h_final, d_final, l1, cudaMemcpyDeviceToHost);
-	/*for(int i=0; i<563; i++)
-	{	result[i%720]+= h_final[i];}*/
+	for(int i=0; i<720; i++)
+	{	result[i]+= h_final[i];}
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	
@@ -195,7 +195,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	for(int i=0; i<720; i++)
 		{
 		 
-		printf( "%f ", h_final[i]);
+		printf( "%f ", result[i]);
 	}
 	
 		
