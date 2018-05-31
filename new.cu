@@ -15,13 +15,6 @@
 
 
 using namespace std;
-/*__global__ void finishing(int *real,  int *mix, int *synthetic, volatile float *result) 
-{
-	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
-	if(idx<720)
-	result[idx]=((float)(real[idx]-2*mix[idx]+synthetic[idx]))/((float) synthetic[idx]); 
-	
-}*/
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
 
 {
@@ -62,7 +55,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	   for(int i=idx+1; i<100000;i++)
 	    { 		
 		   k=b0[i]; 
-		   sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
+		   sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800+;
 		   ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;
 		   ac= acosf(sb0*sb1+ cb0*ccb1*cos((a0[i]-a0[idx])));
 	           ac= (ac*fix2/0.25); 
@@ -121,7 +114,7 @@ float* h_B1 = (float*)malloc(arraybytes);
 int* h_C = (int*)malloc(arraybytes1); 
 int* h_D = (int*)malloc(arraybytes1); 	
 int* h_E = (int*)malloc(arraybytes1); 	
-	float* h_final = (float*)malloc(l1); 
+	
 	int* result=(int*)malloc(l); 
 	int* result_r=(int*)malloc(l); 
 	int* result_s=(int*)malloc(l); 
@@ -142,7 +135,6 @@ float* d_B1; cudaMalloc(&d_B1, arraybytes);
 int* d_C; cudaMalloc(&d_C, arraybytes1);
 	int* d_D; cudaMalloc(&d_D, arraybytes1);
 	int* d_E; cudaMalloc(&d_E, arraybytes1);
-	float* d_final; cudaMalloc(&d_final, l1);
 	int* d_result; cudaMalloc(&d_result, l);
 	int* d_result_r; cudaMalloc(&d_result_r, l);
 	int* d_result_s; cudaMalloc(&d_result_s, l);
@@ -174,18 +166,12 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
 
 	result_r[0]=result_r[0]+100000; result_s[0]=result_s[0]+100000; 
-/*	cudaMemcpy(result, d_result, l, cudaMemcpyHostToDevice);
-	cudaMemcpy(result_r, d_result_r, l, cudaMemcpyHostToDevice);
-	cudaMemcpy(result_s, d_result_s, l, cudaMemcpyHostToDevice);
-	cudaMemset(d_final,0,l1);
-	finishing<<<blocksize2, threadsPerBlock1>>>(d_result_r, d_result,d_result_s, d_final);*/
+
 	final[0]=(float) ((float)(result_r[0]-2*result[0]+result_s[0]+200000)/(float)(100000+ result_s[0]));	
 	for(int i=1;i<720;i++)
 		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]);
 	
-	/*cudaMemcpy(h_final, d_final, l1, cudaMemcpyDeviceToHost);
-	for(int i=0; i<720; i++)
-	{	result[i]+= h_final[i];}*/
+	
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	
@@ -203,9 +189,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);cudaFree(d_D);cudaFree(h_D);cudaFree(d_E);cudaFree(h_E);
-	cudaFree(d_A1);cudaFree(h_A1);cudaFree(d_B1);cudaFree(h_B1); free(result); free(result_s); free(result_r); 
-	free(h_final); free(d_final); free(d_result); free(d_result_s); free(d_result_r); 
-
+	cudaFree(d_A1);cudaFree(h_A1);cudaFree(d_B1);cudaFree(h_B1); 
 	
 }
 
