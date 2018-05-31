@@ -55,7 +55,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	   for(int i=idx+1; i<100000;i++)
 	    { 		
 		   k=b0[i]; 
-		   sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800+;
+		   sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
 		   ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;
 		   ac= acosf(sb0*sb1+ cb0*ccb1*cos((a0[i]-a0[idx])));
 	           ac= (ac*fix2/0.25); 
