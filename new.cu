@@ -15,13 +15,13 @@
 
 
 using namespace std;
-__global__ void finishing(int *real,  int *mix, int *synthetic, volatile float *result) 
+/*__global__ void finishing(int *real,  int *mix, int *synthetic, volatile float *result) 
 {
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
 	if(idx<720)
 	result[idx]=((float)(real[idx]-2*mix[idx]+synthetic[idx]))/((float) synthetic[idx]); 
 	
-}
+}*/
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
 
 {
@@ -174,18 +174,18 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
 
 	result_r[0]=result_r[0]+100000; result_s[0]=result_s[0]+100000; 
-	cudaMemcpy(result, d_result, l, cudaMemcpyHostToDevice);
+/*	cudaMemcpy(result, d_result, l, cudaMemcpyHostToDevice);
 	cudaMemcpy(result_r, d_result_r, l, cudaMemcpyHostToDevice);
 	cudaMemcpy(result_s, d_result_s, l, cudaMemcpyHostToDevice);
 	cudaMemset(d_final,0,l1);
-	finishing<<<blocksize2, threadsPerBlock1>>>(d_result_r, d_result,d_result_s, d_final);
-	/*final[0]=(float) ((float)(result_r[0]-2*result[0]+result_s[0]+200000)/(float)(100000+ result_s[0]));	
+	finishing<<<blocksize2, threadsPerBlock1>>>(d_result_r, d_result,d_result_s, d_final);*/
+	final[0]=(float) ((float)(result_r[0]-2*result[0]+result_s[0]+200000)/(float)(100000+ result_s[0]));	
 	for(int i=1;i<720;i++)
-		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]);*/
+		final[i]=(float) ((float)(result_r[i]-2*result[i]+result_s[i])/(float) result_s[i]);
 	
-	cudaMemcpy(h_final, d_final, l1, cudaMemcpyDeviceToHost);
+	/*cudaMemcpy(h_final, d_final, l1, cudaMemcpyDeviceToHost);
 	for(int i=0; i<720; i++)
-	{	result[i]+= h_final[i];}
+	{	result[i]+= h_final[i];}*/
 	end = clock();
      cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	
@@ -195,7 +195,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	for(int i=0; i<720; i++)
 		{
 		 
-		printf( "%f ", result[i]);
+		printf( "%f ", final[i]);
 	}
 	
 		
