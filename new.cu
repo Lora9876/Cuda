@@ -48,7 +48,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		  fb=3;
 		  fsb=4;
 		  factorial=2; factorials=6;
-		for(int i=0; i<7; i++)
+		for(int i=0; i<5; i++)
 		{ 
 			ccb1=ccb1+minus*pom/factorial; 
 			sb1=sb1+minus*k*pom/factorials; 
@@ -74,7 +74,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		   fb=3;
 		   fsb=4;
 		   factorial=2; factorials=6;
-		for(int i=0; i<7; i++)
+		for(int i=0; i<5; i++)
 		{ 
 			ccb1=ccb1+minus*pom/factorial; 
 			sb1=sb1+minus*k*pom/factorials; 
@@ -95,7 +95,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		  fb=3;
 		  fsb=4;
 		  factorial=2; factorials=6;
-		for(int i=0; i<7; i++)
+		for(int i=0; i<5; i++)
 		{ 
 			ccb1=ccb1+minus*pom/factorial; 
 			sb1=sb1+minus*k*pom/factorials; 
