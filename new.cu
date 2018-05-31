@@ -202,7 +202,8 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 
 cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
 	cudaFree(h_A); cudaFree(h_B); cudaFree(h_C);cudaFree(d_D);cudaFree(h_D);cudaFree(d_E);cudaFree(h_E);
-	cudaFree(d_A1);cudaFree(h_A1);cudaFree(d_B1);cudaFree(h_B1);
+	cudaFree(d_A1);cudaFree(h_A1);cudaFree(d_B1);cudaFree(h_B1); free(result); free(result_s); free(result_r); 
+	free(h_final); free(d_final); free(d_result); free(d_result_s); free(d_result_r); 
 
 	
 }
