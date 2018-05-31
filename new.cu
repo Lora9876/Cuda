@@ -19,7 +19,7 @@ __global__ void finishing(int *real,  int *mix, int *synthetic, volatile float *
 {
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
 	if(idx<720)
-	result[idx]=(float) ((float)(real[idx]-2*mix[idx]+synthetic[idx]))/((float) synthetic[idx]); 
+	result[idx]=((float)(real[idx]-2*mix[idx]+synthetic[idx]));///((float) synthetic[idx]); 
 	
 }
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
