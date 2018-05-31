@@ -20,7 +20,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 {
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
 	
-	float ac, bb0,sb1,sb0,cb0,k,bb1,ssb1,cb1,ccb1; 
+	float ac, bb0,sb1,sb0,cb0,k,bb1,ssb1,cb1,ccb1,pom,minus,factorial, factorials; 
     int angle;  float fix2=57;
     	 bb0=b0[idx];  bb1=b1[idx]; ssb1=sin(bb1); 
      		sb0=sin(bb0); cb0=cos(bb0); cb1=cos(bb1);
@@ -42,8 +42,21 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
         for(int i=0; i<100000; i++)
         	{
 		  k=b1[i];
-		  sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
-		  ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;
+		  pom=k*k; 
+		  minus=-1; 
+		  sb1=k; ccb1=1;
+		  fb=3;
+		  fsb=4;
+		  factorial=2; factorials=6;
+		for(int i=0; i<10; i++)
+		{ 
+			ccb1=ccb1+minus*pom/factorial; 
+			sb1=sb1+minus*k*pom/factorials; 
+			factoral=factorial*fb*(fb+1); fb+=2;
+			factorials=factorials*fsb*(fsb+1); 
+		}
+		 /* sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
+		  ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;*/
           	  ac= acosf(sb0*sb1+ cb0*ccb1*cos((a1[i]-a0[idx])));
 		  ac= (ac*fix2/0.25); 
 	
