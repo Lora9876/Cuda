@@ -19,7 +19,7 @@ __global__ void finishing(int *real,  int *mix, int *synthetic, volatile float *
 {
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
 	if(idx<720)
-	result[idx]=((float)(real[idx]-2*mix[idx]+synthetic[idx]));///((float) synthetic[idx]); 
+	result[idx]=((float)(real[idx]-2*mix[idx]+synthetic[idx]))/((float) synthetic[idx]); 
 	
 }
 __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a1, volatile float*b1, volatile int *hist, volatile int* hist_r, volatile int* hist_s)
@@ -48,13 +48,13 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
       
         for(int i=0; i<100000; i++)
         	{
-		k=b1[i];
-		sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
-		ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;
-           ac= acosf(sb0*sb1+ cb0*ccb1*cos((a1[i]-a0[idx])));
-		ac= (ac*fix2/0.25); 
+		  k=b1[i];
+		  sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
+		  ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;
+          	  ac= acosf(sb0*sb1+ cb0*ccb1*cos((a1[i]-a0[idx])));
+		  ac= (ac*fix2/0.25); 
 	
-		angle=(int) ac; 
+		  angle=(int) ac; 
 		  atomicAdd(&mn[angle],1);
 		
 		}
@@ -65,16 +65,17 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		   sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
 		   ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;
 		   ac= acosf(sb0*sb1+ cb0*ccb1*cos((a0[i]-a0[idx])));
-	    ac= (ac*fix2/0.25); 
-            angle=(int) ac; 
-            atomicAdd(&r[angle],2);
+	           ac= (ac*fix2/0.25); 
+                   angle=(int) ac; 
+                   atomicAdd(&r[angle],2);
+		   
 	     	   k=b1[i];
 		   sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
 		   ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;
-          ac= acosf((ssb1*sb1)+ cb1*ccb1*cos((a1[idx]-a1[i])));
-            ac= (ac*fix2/0.25); 
-	    angle=(int) ac; 
-            atomicAdd(&s[angle],2);
+                   ac= acosf((ssb1*sb1)+ cb1*ccb1*cos((a1[idx]-a1[i])));
+                   ac= (ac*fix2/0.25); 
+	           angle=(int) ac; 
+                   atomicAdd(&s[angle],2);
 
                 }
 	
@@ -172,7 +173,7 @@ cudaMemcpy(d_B1, h_B1, arraybytes, cudaMemcpyHostToDevice);
 	for(int i=0; i<720*xx; i++)
 	{	result[i%720]+= h_C[i];result_r[i%720]+=h_D[i];result_s[i%720]+=h_E[i];} 
 
-	result_r[0]=result_r[0]+100000; result_s[0]=result_s[0]+100000; 
+	//result_r[0]=result_r[0]+100000; result_s[0]=result_s[0]+100000; 
 	cudaMemcpy(result, d_result, l, cudaMemcpyHostToDevice);
 	cudaMemcpy(result_r, d_result_r, l, cudaMemcpyHostToDevice);
 	cudaMemcpy(result_s, d_result_s, l, cudaMemcpyHostToDevice);
