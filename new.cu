@@ -68,10 +68,10 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		
 	   for(int i=idx+1; i<100000;i++)
 	    { 		
-		   k=b0[i]; 
-		   pom=k*k; 
+		   k=b0[i]; k1=a0[i]-a0[idx];
+		   pom=k*k; pom1=k1*k1;
 		   minus=-1;  
-		   sb1=k; ccb1=1; 
+		   sb1=k; ccb1=1; ccd=1; 
 		   fb=3;
 		   fsb=4;
 		   factorial=2; factorials=6;
@@ -79,20 +79,21 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		{ 
 			ccb1=ccb1+minus*pom/factorial; 
 			sb1=sb1+minus*k*pom/factorials; 
+			ccd=ccd+minus*pom1/factorial;
 			factorial=factorial*fb*(fb+1); fb+=2;
 			factorials=factorials*fsb*(fsb+1);  fsb+=2; minus=minus*(-1); pom=pom*k*k;  
 		}
 		 /*  sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
 		   ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;*/
-		   ac= acosf(sb0*sb1+ cb0*ccb1*cos((a0[i]-a0[idx])));
+		   ac= acosf(sb0*sb1+ cb0*ccb1*ccd);
 	           ac= (ac*fix2/0.25); 
                    angle=(int) ac; 
                    atomicAdd(&r[angle],2);
 		   
-	     	   k=b1[i];
-		   pom=k*k; 
+	     	   k=b1[i]; k1=a0[i]-a0[idx];
+		   pom=k*k; pom1=k1*k1;
 		  minus=-1;  
-		  sb1=k; ccb1=1;
+		  sb1=k; ccb1=1;ccd=1; 
 		  fb=3;
 		  fsb=4;
 		  factorial=2; factorials=6;
@@ -100,12 +101,13 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		{ 
 			ccb1=ccb1+minus*pom/factorial; 
 			sb1=sb1+minus*k*pom/factorials; 
+			ccd=ccd+minus*pom1/factorial;
 			factorial=factorial*fb*(fb+1); fb+=2;
 			factorials=factorials*fsb*(fsb+1);  fsb+=2; minus=minus*(-1); pom=pom*k*k;  
 		}
 		 /*  sb1=k-k*k*k/6 + k*k*k*k*k/120- k*k*k*k*k*k*k/5040+k*k*k*k*k*k*k*k*k/362880-k*k*k*k*k*k*k*k*k*k*k/39916800;
 		   ccb1=1-k*k/2+k*k*k*k/24-k*k*k*k*k*k/720+k*k*k*k*k*k*k*k/40320-k*k*k*k*k*k*k*k*k*k/3628800;*/
-                   ac= acosf((ssb1*sb1)+ cb1*ccb1*cos((a1[idx]-a1[i])));
+                   ac= acosf((ssb1*sb1)+ cb1*ccb1*ccd);
                    ac= (ac*fix2/0.25); 
 	           angle=(int) ac; 
                    atomicAdd(&s[angle],2);
