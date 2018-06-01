@@ -41,10 +41,10 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
       
         for(int i=0; i<100000; i++)
         	{
-		  k=b1[i]; k1=a0[i]-a0[idx]
+		  k=b1[i]; k1=a0[i]-a0[idx];
 		  pom=k*k; pom1=k1*k1;
 		  minus=-1;  
-		  sb1=k; ccb1=1;ccd1=1; 
+		  sb1=k; ccb1=1;ccd=1; 
 		  fb=3;
 		  fsb=4;
 		  factorial=2; factorials=6;
