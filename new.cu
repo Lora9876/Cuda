@@ -20,7 +20,7 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 {
 	int idx= blockIdx.x * blockDim.x + threadIdx.x; 
 	
-	float ac, bb0,sb1,sb0,cb0,k,bb1,ssb1,cb1,ccb1,pom,minus,factorial, factorials,fb,fsb,k1,pom1,ccd; 
+	float ac, bb0,sb1,sb0,cb0,k,bb1,ssb1,cb1,ccb1,pom,minus,factorial, factorials,fb,fsb, k1, pom1, ccd; 
     int angle;  float fix2=57;
     	 bb0=b0[idx];  bb1=b1[idx]; ssb1=sin(bb1); 
      		sb0=sin(bb0); cb0=cos(bb0); cb1=cos(bb1);
@@ -41,8 +41,8 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
       
         for(int i=0; i<100000; i++)
         	{
-		  k=b1[i]; k1=a1[i]-a0[idx];
-		  pom=k*k; pom1=k1*k1;
+		  k=b1[i]; 
+		  pom=k*k; 
 		  minus=-1;  
 		  sb1=k; ccb1=1;
 		  fb=3;
@@ -67,8 +67,8 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 		
 	   for(int i=idx+1; i<100000;i++)
 	    { 		
-		   k=b0[i]; 
-		   pom=k*k; 
+		   k=b0[i]; k1=a1[i]-a0[idx];
+		   pom=k*k; pom1=k1*k1;
 		   minus=-1;  
 		   sb1=k; ccb1=1; ccd=1; 
 		   fb=3;
