@@ -22,24 +22,9 @@ __global__ void angles(volatile float *a0, volatile float *b0, volatile float *a
 	
 	float ac, bb0,sb1,sb0,cb0,k,bb1,ssb1,cb1,ccb1,pom,minus,factorial, factorials,fb,fsb ,k1, pom1,ccd; 
     int angle;  float fix2=57;
-    	 k=b0[idx];  k1=b1[idx]; /*ssb1=sin(bb1); 
-     		sb0=sin(bb0); cb0=cos(bb0); cb1=cos(bb1);*/
-		  pom=k*k; pom1=k1*k1;
-		  minus=-1;  
-		  ssb1=k1; cb0=1;cb1=1; sb0=k; 
-		  fb=3;
-		  fsb=4;
-		  factorial=2; factorials=6;
-		for(int i=0; i<5; i++)
-		{ 
-			cb0=cb0+minus*pom/factorial; 
-			sb0=sb0+minus*k*pom/factorials; 
-			
-			cb1=cb1+minus*pom1/factorial; 
-			ssb1=ssb1+minus*k1*pom1/factorials; 
-			factorial=factorial*fb*(fb+1); fb+=2;
-			factorials=factorials*fsb*(fsb+1);  fsb+=2; minus=minus*(-1); pom=pom*k*k;  
-		}
+    	 k=b0[idx];  k1=b1[idx]; ssb1=sin(bb1); 
+     		sb0=sin(bb0); cb0=cos(bb0); cb1=cos(bb1);
+		
     __shared__ int mn[720], r[720], s[720];
 	
    if(threadIdx.x==0 )
